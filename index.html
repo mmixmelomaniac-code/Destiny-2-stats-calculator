@@ -64,15 +64,9 @@ code { color: #a9d6ff; }
   <h2>Target stats</h2>
   <p>Enter exact values from 0 to 150.</p>
   <div class="stats" id="inputs"></div>
-  <label for="priority" style="margin-top:16px">Priority order</label>
-  <select id="priority">
-    <option value="W,H,S,C,G,M">W → H → S → C → G → M</option>
-    <option value="H,S,W,C,G,M">H → S → W → C → G → M</option>
-    <option value="G,W,H,S,C,M">G → W → H → S → C → M</option>
-    <option value="S,W,H,C,G,M">S → W → H → C → G → M</option>
-    <option value="C,W,H,S,G,M">C → W → H → S → G → M</option>
-    <option value="M,W,H,S,C,G">M → W → H → S → C → G</option>
-  </select>
+<h3 style="margin-top:16px">Stat Priority Order</h3>
+<p>Use the arrows to arrange your preferred stat priority.</p>
+<div id="priority-list"></div>
   <button id="calculate">Find exact spread</button>
 </div>
 <div class="panel" id="result" aria-live="polite">
@@ -80,6 +74,60 @@ code { color: #a9d6ff; }
 </div>
 <script>
 const stats = ["W", "H", "S", "C", "G", "M"];
+  const statNames = {
+  W: "Weapons",
+  H: "Health",
+  S: "Super",
+  C: "Class",
+  G: "Grenade",
+  M: "Melee"
+};
+
+let priorityOrder = [...stats];
+
+function renderPriorityList() {
+  const list = document.getElementById("priority-list");
+  list.innerHTML = "";
+
+  priorityOrder.forEach((stat, index) => {
+    const row = document.createElement("div");
+    row.style.cssText =
+      "display:flex;align-items:center;gap:12px;" +
+      "padding:10px;margin:6px 0;background:#26354b;" +
+      "border-radius:8px;color:white;";
+
+    const name = document.createElement("span");
+    name.textContent =
+      `${index + 1}. ${statNames[stat]}`;
+    name.style.flex = "1";
+
+    const up = document.createElement("button");
+    up.textContent = "↑";
+    up.disabled = index === 0;
+    up.setAttribute("aria-label", `Move ${statNames[stat]} up`);
+    up.onclick = () => {
+      [priorityOrder[index - 1], priorityOrder[index]] =
+        [priorityOrder[index], priorityOrder[index - 1]];
+      renderPriorityList();
+    };
+
+    const down = document.createElement("button");
+    down.textContent = "↓";
+    down.disabled = index === priorityOrder.length - 1;
+    down.setAttribute("aria-label", `Move ${statNames[stat]} down`);
+    down.onclick = () => {
+      [priorityOrder[index], priorityOrder[index + 1]] =
+        [priorityOrder[index + 1], priorityOrder[index]];
+      renderPriorityList();
+    };
+
+    row.append(name, up, down);
+    list.appendChild(row);
+  });
+}
+
+renderPriorityList();
+
 // Each parent: [parent name, +30 stat, +25 stat]
 cconst parents = [
   ["B", "Bulwark", "H", "C"],
@@ -112,7 +160,7 @@ for (const [name, archetype, primary, collateral] of parents) {
 
     functions.push({
       id: name + "" + bonus,
-      name: name + "" + bonus,
+      name: `${archetype} — Tertiary: ${statNames[tertiary]}`,
       archetype: archetype,
       parent: name,
       primary: primary,
@@ -137,75 +185,83 @@ for (const stat of stats) {
   inputs.appendChild(label);
 }
 function findSpread(target) {
-  // Dynamic programming searches every combination of exactly
-  // five variations, retaining only states at or below each target.
-  const targetKey = stats.map(s => target[s]).join(",");
   const zero = stats.map(() => 0);
   const key = (arr, count) => count + "|" + arr.join(",");
+
+  function compareSolutions(a, b) {
+    for (const stat of priorityOrder) {
+      const i = stats.indexOf(stat);
+      if (a.totals[i] !== b.totals[i]) {
+        return b.totals[i] - a.totals[i];
+      }
+    }
+    return 0;
+  }
+
   let states = new Map();
   states.set(key(zero, 0), { totals: zero, chosen: [] });
-  for (const fn of functions) {
-    const next = new Map(states);
-    for (const state of states.values()) {
-      if (state.chosen.length >= 5) continue;
-      const totals = state.totals.map((v, i) =>
-        v + fn.values[stats[i]]
-      );
-      if (totals.some((v, i) => v > target[stats[i]] || v > 150)) {
-        continue;
-      }
-      const chosen = [...state.chosen, fn];
-      const k = key(totals, chosen.length);
-      if (!next.has(k)) next.set(k, { totals, chosen });
-    }
-    states = next;
-  }
-  const found = states.get(key(stats.map(s => target[s]), 5));
-  if (found) return found;
-  // The same parent may be used multiple times in different variations.
-  // Search all five-slot selections with repetition, pruning by targets.
-  let current = [{ totals: zero, chosen: [] }];
+
   for (let slot = 0; slot < 5; slot++) {
     const next = new Map();
-    for (const state of current) {
+
+    for (const state of states.values()) {
       for (const fn of functions) {
-        const totals = state.totals.map((v, i) =>
-          v + fn.values[stats[i]]
+        const totals = state.totals.map(
+          (v, i) => v + fn.values[stats[i]]
         );
-        if (totals.some((v, i) => v > target[stats[i]] || v > 150)) continue;
+
+        if (totals.some(
+          (v, i) => v > target[stats[i]] || v > 150
+        )) continue;
+
         const chosen = [...state.chosen, fn];
         const k = key(totals, slot + 1);
-        if (!next.has(k)) next.set(k, { totals, chosen });
+
+        if (!next.has(k)) {
+          next.set(k, { totals, chosen });
+        }
       }
     }
-    current = [...next.values()];
-    if (current.length === 0) break;
+
+    states = next;
+    if (states.size === 0) return null;
   }
-  return current.find(state =>
-    stats.every((s, i) => state.totals[i] === target[s])
-  ) || null;
+
+  const solutions = [...states.values()];
+  solutions.sort(compareSolutions);
+  return solutions[0] || null;
 }
+
 function renderSpread(spread, target) {
   const result = document.getElementById("result");
+
   if (!spread) {
-    result.innerHTML = "<h2>No exact solution found</h2>" +
-      "<p>These exact targets cannot be reached by this search using five functions. Try different target values.</p>";
+    result.innerHTML =
+      "<h2>No valid spread found</h2>" +
+      "<p>Try increasing one or more maximum stat values. " +
+      "Each stat must be between 0 and 150.</p>";
     return;
   }
+
   const counts = {};
   for (const fn of spread.chosen) {
     counts[fn.name] = (counts[fn.name] || 0) + 1;
   }
-  result.innerHTML = "<h2>Found a spread!</h2>" +
+
+  result.innerHTML =
+    "<h2>Best spread found</h2>" +
     "<p>Five function selections:</p>" +
-    "<ul>" + Object.entries(counts).map(([name, count]) =>
+    "<ul>" +
+    Object.entries(counts).map(([name, count]) =>
       `<li><code>${name}</code> × ${count}</li>`
-    ).join("") + "</ul>" +
+    ).join("") +
+    "</ul>" +
     "<h3>Resulting stats</h3>" +
     stats.map((s, i) =>
-      `<div class="statline"><strong>${s}: ${spread.totals[i]}</strong>` +
+      `<div class="statline"><strong>${statNames[s]}: ${spread.totals[i]}</strong>` +
       `<div class="bar"><div class="fill" style="width:${spread.totals[i] / 150 * 100}%"></div></div></div>`
     ).join("");
+} 	
 }
 document.getElementById("calculate").addEventListener("click", () => {
   const target = {};
