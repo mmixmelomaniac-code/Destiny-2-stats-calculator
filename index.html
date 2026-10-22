@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,6 +44,21 @@ button {
   font-weight: bold;
 }
 button:hover { background: #398de9; }
+button:disabled { opacity: 0.4; cursor: default; }
+.priority-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  margin: 6px 0;
+  background: #26354b;
+  border-radius: 8px;
+}
+.priority-row span { flex: 1; }
+.priority-row button {
+  width: 48px;
+  margin-top: 0;
+}
 .statline { margin: 12px 0; }
 .bar {
   background: #344256;
@@ -54,27 +70,34 @@ button:hover { background: #398de9; }
 code { color: #a9d6ff; }
 @media(max-width:550px) {
   .stats { grid-template-columns: repeat(2, 1fr); }
+  body { padding: 12px; }
 }
 </style>
 </head>
 <body>
-<h1>Stat Spread Calculator</h1>
-<p>Choose target stats and find a combination of five function variations.</p>
+<h1>Destiny 2 Stat Spread Calculator</h1>
+<p>Choose maximum stat values and find the best combination of five function selections.</p>
+
 <div class="panel">
-  <h2>Target stats</h2>
-  <p>Enter exact values from 0 to 150.</p>
+  <h2>Maximum Stats</h2>
+  <p>Enter a maximum from 0 to 150 for each stat. The calculator will not exceed these limits.</p>
   <div class="stats" id="inputs"></div>
-<h3 style="margin-top:16px">Stat Priority Order</h3>
-<p>Use the arrows to arrange your preferred stat priority.</p>
-<div id="priority-list"></div>
-  <button id="calculate">Find exact spread</button>
+
+  <h3>Stat Priority Order</h3>
+  <p>Move your most important stat to the top. The calculator maximizes each stat in order, while respecting the limits above.</p>
+  <div id="priority-list"></div>
+
+  <button id="calculate">Find Best Spread</button>
 </div>
+
 <div class="panel" id="result" aria-live="polite">
-  Enter your targets and click Find exact spread.
+  Enter your maximums and click Find Best Spread.
 </div>
+
 <script>
 const stats = ["W", "H", "S", "C", "G", "M"];
-  const statNames = {
+
+const statNames = {
   W: "Weapons",
   H: "Health",
   S: "Super",
@@ -91,15 +114,10 @@ function renderPriorityList() {
 
   priorityOrder.forEach((stat, index) => {
     const row = document.createElement("div");
-    row.style.cssText =
-      "display:flex;align-items:center;gap:12px;" +
-      "padding:10px;margin:6px 0;background:#26354b;" +
-      "border-radius:8px;color:white;";
+    row.className = "priority-row";
 
     const name = document.createElement("span");
-    name.textContent =
-      `${index + 1}. ${statNames[stat]}`;
-    name.style.flex = "1";
+    name.textContent = `${index + 1}. ${statNames[stat]}`;
 
     const up = document.createElement("button");
     up.textContent = "↑";
@@ -128,7 +146,6 @@ function renderPriorityList() {
 
 renderPriorityList();
 
-// Each parent: [parent name, +30 stat, +25 stat]
 const parents = [
   ["B", "Bulwark", "H", "C"],
   ["O", "Siegebreaker", "H", "G"],
@@ -143,50 +160,84 @@ const parents = [
   ["F", "Skirmisher", "M", "W"],
   ["A", "Brawler", "M", "H"]
 ];
-// Generate four variations for each parent.
-// A bonus can go to any stat not already in that parent.
+
 const functions = [];
-for (const [name, archetype, primary, collateral] of parents) {
-  for (const bonus of stats) {
-    if (bonus === primary || bonus === collateral) continue;
+
+for (const [code, archetype, primary, secondary] of parents) {
+  for (const tertiary of stats) {
+    if (tertiary === primary || tertiary === secondary) continue;
 
     const values = Object.fromEntries(
-      stats.map(s => [s, 0])
+      stats.map(stat => [stat, 0])
     );
 
     values[primary] = 30;
-    values[collateral] = 25;
-    values[bonus] = 20;
+    values[secondary] = 25;
+    values[tertiary] = 20;
 
     functions.push({
-      id: name + "" + bonus,
+      id: `${code}_${tertiary}`,
       name: `${archetype} — Tertiary: ${statNames[tertiary]}`,
-      archetype: archetype,
-      parent: name,
-      primary: primary,
-      collateral: collateral,
-      bonus: bonus,
-      values: values
+      archetype,
+      primary,
+      secondary,
+      tertiary,
+      values
     });
   }
 }
+
 const inputs = document.getElementById("inputs");
+
 for (const stat of stats) {
   const label = document.createElement("label");
-  label.textContent = stat + " target";
+  label.textContent = statNames[stat];
+
   const input = document.createElement("input");
   input.type = "number";
   input.min = "0";
   input.max = "150";
   input.step = "1";
-  input.value = "0";
+  input.value = "150";
   input.id = "target-" + stat;
+  input.setAttribute("aria-label", `Maximum ${statNames[stat]}`);
+
   label.appendChild(input);
   inputs.appendChild(label);
 }
+
 function findSpread(target) {
   const zero = stats.map(() => 0);
-  const key = (arr, count) => count + "|" + arr.join(",");
+  const key = (totals, count) => count + "|" + totals.join(",");
+
+  let states = new Map();
+  states.set(key(zero, 0), { totals: zero, chosen: [] });
+
+  for (let slot = 0; slot < 5; slot++) {
+    const next = new Map();
+
+    for (const state of states.values()) {
+      for (const fn of functions) {
+        const totals = state.totals.map(
+          (value, i) => value + fn.values[stats[i]]
+        );
+
+        if (totals.some(
+          (value, i) => value > target[stats[i]] || value > 150
+        )) continue;
+
+        const chosen = [...state.chosen, fn];
+        const stateKey = key(totals, slot + 1);
+
+        if (!next.has(stateKey)) {
+          next.set(stateKey, { totals, chosen });
+        }
+      }
+    }
+
+    states = next;
+    if (states.size === 0) return null;
+  }
 
   function compareSolutions(a, b) {
     for (const stat of priorityOrder) {
@@ -198,48 +249,18 @@ function findSpread(target) {
     return 0;
   }
 
-  let states = new Map();
-  states.set(key(zero, 0), { totals: zero, chosen: [] });
-
-  for (let slot = 0; slot < 5; slot++) {
-    const next = new Map();
-
-    for (const state of states.values()) {
-      for (const fn of functions) {
-        const totals = state.totals.map(
-          (v, i) => v + fn.values[stats[i]]
-        );
-
-        if (totals.some(
-          (v, i) => v > target[stats[i]] || v > 150
-        )) continue;
-
-        const chosen = [...state.chosen, fn];
-        const k = key(totals, slot + 1);
-
-        if (!next.has(k)) {
-          next.set(k, { totals, chosen });
-        }
-      }
-    }
-
-    states = next;
-    if (states.size === 0) return null;
-  }
-
   const solutions = [...states.values()];
   solutions.sort(compareSolutions);
   return solutions[0] || null;
 }
 
-function renderSpread(spread, target) {
+function renderSpread(spread) {
   const result = document.getElementById("result");
 
   if (!spread) {
     result.innerHTML =
       "<h2>No valid spread found</h2>" +
-      "<p>Try increasing one or more maximum stat values. " +
-      "Each stat must be between 0 and 150.</p>";
+      "<p>Try increasing one or more maximum values.</p>";
     return;
   }
 
@@ -249,33 +270,38 @@ function renderSpread(spread, target) {
   }
 
   result.innerHTML =
-    "<h2>Best spread found</h2>" +
+    "<h2>Best Spread Found</h2>" +
     "<p>Five function selections:</p>" +
     "<ul>" +
     Object.entries(counts).map(([name, count]) =>
       `<li><code>${name}</code> × ${count}</li>`
     ).join("") +
     "</ul>" +
-    "<h3>Resulting stats</h3>" +
-    stats.map((s, i) =>
-      `<div class="statline"><strong>${statNames[s]}: ${spread.totals[i]}</strong>` +
+    "<h3>Resulting Stats</h3>" +
+    stats.map((stat, i) =>
+      `<div class="statline"><strong>${statNames[stat]}: ${spread.totals[i]}</strong>` +
       `<div class="bar"><div class="fill" style="width:${spread.totals[i] / 150 * 100}%"></div></div></div>`
     ).join("");
-} 	
 }
+
 document.getElementById("calculate").addEventListener("click", () => {
   const target = {};
+
   for (const stat of stats) {
-    const value = Number(document.getElementById("target-" + stat).value);
+    const input = document.getElementById("target-" + stat);
+    const value = Number(input.value);
+
     if (!Number.isInteger(value) || value < 0 || value > 150) {
       document.getElementById("result").textContent =
-        "Every target must be a whole number from 0 to 150.";
+        "Every maximum must be a whole number from 0 to 150.";
       return;
     }
+
     target[stat] = value;
   }
+
   const spread = findSpread(target);
-  renderSpread(spread, target);
+  renderSpread(spread);
 });
 </script>
 </body>
