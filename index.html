@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Destiny 2 Stat Spread Calculator</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #101722;
+  color: #f3f6fc;
+  max-width: 900px;
+  margin: auto;
+  padding: 24px;
+}
+h1 { color: #8dc5ff; }
+.panel {
+  background: #1c293a;
+  padding: 18px;
+  border-radius: 12px;
+  margin: 16px 0;
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+label { display: block; margin-bottom: 6px; }
+input, select, button {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #536780;
+  font-size: 16px;
+}
+button {
+  background: #2777d4;
+  color: white;
+  cursor: pointer;
+  border: 0;
+  margin-top: 12px;
+  font-weight: bold;
+}
+button:hover { background: #398de9; }
+.statline { margin: 12px 0; }
+.bar {
+  background: #344256;
+  height: 10px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.fill { background: #48b987; height: 100%; }
+code { color: #a9d6ff; }
+@media(max-width:550px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+<h1>Stat Spread Calculator</h1>
+<p>Choose target stats and find a combination of five function variations.</p>
+<div class="panel">
+  <h2>Target stats</h2>
+  <p>Enter exact values from 0 to 150.</p>
+  <div class="stats" id="inputs"></div>
+  <label for="priority" style="margin-top:16px">Priority order</label>
+  <select id="priority">
+    <option value="W,H,S,C,G,M">W → H → S → C → G → M</option>
+    <option value="H,S,W,C,G,M">H → S → W → C → G → M</option>
+    <option value="G,W,H,S,C,M">G → W → H → S → C → M</option>
+    <option value="S,W,H,C,G,M">S → W → H → C → G → M</option>
+    <option value="C,W,H,S,G,M">C → W → H → S → G → M</option>
+    <option value="M,W,H,S,C,G">M → W → H → S → C → G</option>
+  </select>
+  <button id="calculate">Find exact spread</button>
+</div>
+<div class="panel" id="result" aria-live="polite">
+  Enter your targets and click Find exact spread.
+</div>
+<script>
+const stats = ["W", "H", "S", "C", "G", "M"];
+// Each parent: [parent name, +30 stat, +25 stat]
+const parents = [
+  ["B","H","C"], ["O","H","G"], ["I","W","S"],
+  ["E","W","G"], ["P","S","H"], ["Z","S","M"],
+  ["R","C","M"], ["J","C","W"], ["D","G","C"],
+  ["K","G","S"], ["F","M","W"], ["A","M","H"]
+];
+// Generate four variations for each parent.
+// A bonus can go to any stat not already in that parent.
+const functions = [];
+for (const [name, primary, collateral] of parents) {
+  for (const bonus of stats) {
+    if (bonus !== primary && bonus !== collateral) {
+      const values = Object.fromEntries(stats.map(s => [s, 0]));
+      values[primary] += 30;
+      values[collateral] += 25;
+      values[bonus] += 20;
+      functions.push({
+        name: name + "_" + bonus,
+        parent: name,
+        bonus,
+        values
+      });
+    }
+  }
+}
+const inputs = document.getElementById("inputs");
+for (const stat of stats) {
+  const label = document.createElement("label");
+  label.textContent = stat + " target";
+  const input = document.createElement("input");
+  input.type = "number";
+  input.min = "0";
+  input.max = "150";
+  input.step = "1";
+  input.value = "0";
+  input.id = "target-" + stat;
+  label.appendChild(input);
+  inputs.appendChild(label);
+}
+function findSpread(target) {
+  // Dynamic programming searches every combination of exactly
+  // five variations, retaining only states at or below each target.
+  const targetKey = stats.map(s => target[s]).join(",");
+  const zero = stats.map(() => 0);
+  const key = (arr, count) => count + "|" + arr.join(",");
+  let states = new Map();
+  states.set(key(zero, 0), { totals: zero, chosen: [] });
+  for (const fn of functions) {
+    const next = new Map(states);
+    for (const state of states.values()) {
+      if (state.chosen.length >= 5) continue;
+      const totals = state.totals.map((v, i) =>
+        v + fn.values[stats[i]]
+      );
+      if (totals.some((v, i) => v > target[stats[i]] || v > 150)) {
+        continue;
+      }
+      const chosen = [...state.chosen, fn];
+      const k = key(totals, chosen.length);
+      if (!next.has(k)) next.set(k, { totals, chosen });
+    }
+    states = next;
+  }
+  const found = states.get(key(stats.map(s => target[s]), 5));
+  if (found) return found;
+  // The same parent may be used multiple times in different variations.
+  // Search all five-slot selections with repetition, pruning by targets.
+  let current = [{ totals: zero, chosen: [] }];
+  for (let slot = 0; slot < 5; slot++) {
+    const next = new Map();
+    for (const state of current) {
+      for (const fn of functions) {
+        const totals = state.totals.map((v, i) =>
+          v + fn.values[stats[i]]
+        );
+        if (totals.some((v, i) => v > target[stats[i]] || v > 150)) continue;
+        const chosen = [...state.chosen, fn];
+        const k = key(totals, slot + 1);
+        if (!next.has(k)) next.set(k, { totals, chosen });
+      }
+    }
+    current = [...next.values()];
+    if (current.length === 0) break;
+  }
+  return current.find(state =>
+    stats.every((s, i) => state.totals[i] === target[s])
+  ) || null;
+}
+function renderSpread(spread, target) {
+  const result = document.getElementById("result");
+  if (!spread) {
+    result.innerHTML = "<h2>No exact solution found</h2>" +
+      "<p>These exact targets cannot be reached by this search using five functions. Try different target values.</p>";
+    return;
+  }
+  const counts = {};
+  for (const fn of spread.chosen) {
+    counts[fn.name] = (counts[fn.name] || 0) + 1;
+  }
+  result.innerHTML = "<h2>Found a spread!</h2>" +
+    "<p>Five function selections:</p>" +
+    "<ul>" + Object.entries(counts).map(([name, count]) =>
+      `<li><code>${name}</code> × ${count}</li>`
+    ).join("") + "</ul>" +
+    "<h3>Resulting stats</h3>" +
+    stats.map((s, i) =>
+      `<div class="statline"><strong>${s}: ${spread.totals[i]}</strong>` +
+      `<div class="bar"><div class="fill" style="width:${spread.totals[i] / 150 * 100}%"></div></div></div>`
+    ).join("");
+}
+document.getElementById("calculate").addEventListener("click", () => {
+  const target = {};
+  for (const stat of stats) {
+    const value = Number(document.getElementById("target-" + stat).value);
+    if (!Number.isInteger(value) || value < 0 || value > 150) {
+      document.getElementById("result").textContent =
+        "Every target must be a whole number from 0 to 150.";
+      return;
+    }
+    target[stat] = value;
+  }
+  const spread = findSpread(target);
+  renderSpread(spread, target);
+});
+</script>
+</body>
+</html>
+
