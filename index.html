@@ -81,29 +81,45 @@ code { color: #a9d6ff; }
 <script>
 const stats = ["W", "H", "S", "C", "G", "M"];
 // Each parent: [parent name, +30 stat, +25 stat]
-const parents = [
-  ["B","H","C"], ["O","H","G"], ["I","W","S"],
-  ["E","W","G"], ["P","S","H"], ["Z","S","M"],
-  ["R","C","M"], ["J","C","W"], ["D","G","C"],
-  ["K","G","S"], ["F","M","W"], ["A","M","H"]
+cconst parents = [
+  ["B", "Bulwark", "H", "C"],
+  ["O", "Siegebreaker", "H", "G"],
+  ["I", "Powerhouse", "W", "S"],
+  ["E", "Gunner", "W", "G"],
+  ["P", "Colossus", "S", "H"],
+  ["Z", "Paragon", "S", "M"],
+  ["R", "Reaver", "C", "M"],
+  ["J", "Specialist", "C", "W"],
+  ["D", "Demolitionist", "G", "C"],
+  ["K", "Grenadier", "G", "S"],
+  ["F", "Skirmisher", "M", "W"],
+  ["A", "Brawler", "M", "H"]
 ];
 // Generate four variations for each parent.
 // A bonus can go to any stat not already in that parent.
 const functions = [];
-for (const [name, primary, collateral] of parents) {
+for (const [name, archetype, primary, collateral] of parents) {
   for (const bonus of stats) {
-    if (bonus !== primary && bonus !== collateral) {
-      const values = Object.fromEntries(stats.map(s => [s, 0]));
-      values[primary] += 30;
-      values[collateral] += 25;
-      values[bonus] += 20;
-      functions.push({
-        name: name + "_" + bonus,
-        parent: name,
-        bonus,
-        values
-      });
-    }
+    if (bonus === primary || bonus === collateral) continue;
+
+    const values = Object.fromEntries(
+      stats.map(s => [s, 0])
+    );
+
+    values[primary] = 30;
+    values[collateral] = 25;
+    values[bonus] = 20;
+
+    functions.push({
+      id: name + "" + bonus,
+      name: name + "" + bonus,
+      archetype: archetype,
+      parent: name,
+      primary: primary,
+      collateral: collateral,
+      bonus: bonus,
+      values: values
+    });
   }
 }
 const inputs = document.getElementById("inputs");
