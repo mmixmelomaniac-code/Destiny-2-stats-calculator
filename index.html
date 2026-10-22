@@ -76,10 +76,10 @@ code { color: #a9d6ff; }
 </head>
 <body>
 <h1>Destiny 2 Stat Spread Calculator</h1>
-<p>Choose maximum stat values and find the best combination of five function selections.</p>
+<p>Enter the minimum value you want for each stat, from 0 to 150. The calculator will find a combination that meets every minimum.</p>
 
 <div class="panel">
-  <h2>Maximum Stats</h2>
+  <h2>Minimum Stats</h2>
   <p>Enter a maximum from 0 to 150 for each stat. The calculator will not exceed these limits.</p>
   <div class="stats" id="inputs"></div>
 
@@ -222,9 +222,7 @@ function findSpread(target) {
           (value, i) => value + fn.values[stats[i]]
         );
 
-        if (totals.some(
-          (value, i) => value > target[stats[i]] || value > 150
-        )) continue;
+      if (totals.some(value => value > 150)) continue;
 
         const chosen = [...state.chosen, fn];
         const stateKey = key(totals, slot + 1);
@@ -249,9 +247,12 @@ function findSpread(target) {
     return 0;
   }
 
-  const solutions = [...states.values()];
-  solutions.sort(compareSolutions);
-  return solutions[0] || null;
+  const solutions = [...states.values()].filter(state =>
+  stats.every((stat, i) => state.totals[i] >= target[stat])
+);
+
+solutions.sort(compareSolutions);
+return solutions[0] || null;
 }
 
 function renderSpread(spread) {
