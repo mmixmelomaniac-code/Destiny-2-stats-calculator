@@ -11,7 +11,7 @@
 <style>
 :root{--bg:#121919;--surface:#182121;--ink:#eef1e8;--muted:#a6b1aa;--line:#34413c;--accent:#d8ef91;--mono:'IBM Plex Mono',monospace;--display:'Barlow Condensed',sans-serif}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:14px 'IBM Plex Sans',sans-serif;background-image:radial-gradient(ellipse at 90% 0%,#29392b55,transparent 50%)}
+body{margin:0;background:radial-gradient(ellipse at 90% 0%,#29392b55,transparent 50%),var(--bg);color:var(--ink);font:14px 'IBM Plex Sans',sans-serif}
 button,input,select{font:inherit}
 button{cursor:pointer}
 .wrap{max-width:1250px;margin:auto;padding:0 26px}
@@ -28,7 +28,7 @@ p{color:var(--muted);line-height:1.7;margin:10px 0}
 .small{font-size:12px}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:22px 16px;margin-top:22px}
 label{display:block;color:var(--muted);font-size:12px}
-input,select{width:100%;border:1px solid var(--line);color:var(--ink);background:var(--surface);border-radius:0;padding:12px;margin-top:8px}
+input[type=number],select{width:100%;border:1px solid var(--line);color:var(--ink);background:var(--surface);border-radius:0;padding:12px;margin-top:8px}
 input[type=number]{font:500 23px var(--mono)}
 input:focus,select:focus{border-color:var(--accent)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:4px}
@@ -44,6 +44,11 @@ summary{color:var(--accent);cursor:pointer;font-size:12px;padding:6px 0}
 .priority-row button:hover:not(:disabled){background:var(--accent);color:var(--bg)}
 .priority-row button:active:not(:disabled){transform:scale(.92)}
 button:disabled{opacity:.35;cursor:default}
+.masterwork{display:flex;align-items:center;gap:14px;padding:18px 0;cursor:pointer;color:var(--ink);font-size:14px}
+.masterwork input{width:21px;height:21px;margin:0;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+.masterwork strong{display:block;font-weight:500}
+.masterwork small{display:block;color:var(--muted);line-height:1.6;margin-top:4px}
+.rules-summary{border-left:2px solid var(--accent);padding-left:14px}
 .action{display:flex;align-items:center;justify-content:space-between;width:100%;border:0;background:var(--accent);color:var(--bg);padding:19px 22px;font-weight:600;transition:.2s}
 .action:hover:not(:disabled){background:#e8ffaf;transform:translateY(-2px)}
 .action:active{transform:translateY(1px)}
@@ -62,8 +67,10 @@ form{animation:reveal .6s both}
 .stat-top{display:flex;justify-content:space-between;margin-bottom:9px}
 .stat-top strong{font:500 15px var(--mono)}
 .stat-top strong span{color:var(--muted);font-size:10px}
-.bar{height:5px;background:#35423c}
+.breakdown{font:10px var(--mono);color:var(--muted);margin-top:7px}
+.bar{height:5px;background:#35423c;display:flex}
 .fill{height:100%;background:var(--accent)}
+.bonus-fill{height:100%;background:#80bcb0}
 .selection{list-style:none;padding:0;margin:0}
 .selection li{border-top:1px solid var(--line);padding:13px 0;display:flex;justify-content:space-between;gap:12px}
 .selection small{display:block;color:var(--muted);margin-top:4px;line-height:1.6}
@@ -100,10 +107,14 @@ footer{margin-top:40px;padding:24px 0;border-top:1px solid var(--line);color:var
 </section>
 <section class="section">
 <div class="heading"><span class="number">03 /</span><h2>Distribution rules</h2></div>
-<p class="small">Five selections · 375 total points · 150 maximum per stat.<br>No masterwork, armor mods, or tuning mods.</p>
+<label class="masterwork">
+<input id="masterwork" type="checkbox" aria-describedby="masterwork-description">
+<span><strong>Use masterworked armor</strong><small id="masterwork-description">All five pieces gain +5 in each stat outside their primary, secondary, and tertiary stats.</small></span>
+</label>
+<p class="small rules-summary" id="rules-summary">Five selections · 375 total points · 150 maximum per stat.<br>Armor mods and tuning mods are excluded.</p>
 <details>
 <summary>Inspect or edit the per-piece model</summary>
-<p class="small">Each piece must total 75. Values apply to every archetype.</p>
+<p class="small">Base values must total 75 per piece. Masterwork adds 15 per piece to the three other stats, giving 90 per piece and 450 overall.</p>
 <div class="model">
 <label>Primary<input id="primary" type="number" min="0" max="30" step="1" value="30" required></label>
 <label>Secondary<input id="secondary" type="number" min="0" max="30" step="1" value="25" required></label>
@@ -115,14 +126,14 @@ footer{margin-top:40px;padding:24px 0;border-top:1px solid var(--line);color:var
 </form>
 <section class="result" id="result" aria-live="polite" aria-atomic="true">
 <div class="result-head"><h2>Your stat spread</h2><span class="status">AWAITING INPUT</span></div>
-<div class="empty"><div class="orb" aria-hidden="true"></div><h3>Ready to calculate.</h3><p>Choose your targets and priorities to find your stat distribution and five armor selections.</p></div>
-<p class="result-note">Base stat distribution only. Masterwork and mod bonuses are not modeled.</p>
+<div class="empty"><div class="orb" aria-hidden="true"></div><h3>Ready to calculate.</h3><p>Choose your targets, priorities, and masterwork setting to find your five armor selections.</p></div>
+<p class="result-note">375 base points, or 450 with all five pieces masterworked. Maximum 150 per stat.</p>
 </section>
 </main>
 <footer>DESTINY 2 / UNOFFICIAL COMMUNITY TOOL</footer>
 </div>
 <script>
-const TOTAL_CAP=375,STAT_CAP=150,PIECES=5;
+const BASE_TOTAL=375,STAT_CAP=150,PIECES=5,MASTERWORK_BONUS=5;
 const stats=["W","H","S","C","G","M"];
 const names={W:"Weapons",H:"Health",S:"Super",C:"Class",G:"Grenade",M:"Melee"};
 const parents=[
@@ -135,7 +146,8 @@ const parents=[
 let priority=[...stats],worker=null,revision=0;
 const result=document.getElementById("result");
 const button=document.getElementById("calculate");
-
+const masterwork=document.getElementById("masterwork");
+function totalFor(masterworked){return BASE_TOTAL+(masterworked?PIECES*3*MASTERWORK_BONUS:0);}
 stats.forEach(stat=>{
  const label=document.createElement("label");
  label.textContent=names[stat];
@@ -185,6 +197,10 @@ function renderPriority(focusStat,direction){
 }
 renderPriority();
 document.getElementById("calculator").addEventListener("input",invalidate);
+masterwork.addEventListener("change",()=>{
+ document.getElementById("rules-summary").innerHTML=
+ `Five selections · ${totalFor(masterwork.checked)} total points · ${STAT_CAP} maximum per stat.<br>${masterwork.checked?"Masterwork included. ":""}Armor mods and tuning mods are excluded.`;
+});
 document.getElementById("mode").addEventListener("change",()=>{
  const minimum=document.getElementById("mode").value==="minimum";
  document.getElementById("mode-description").textContent=minimum?
@@ -221,6 +237,7 @@ function solve(data){
  if(better(totals,best&&best.totals))best={totals:[...totals],chosen:[...chosen]};
  return;
  }
+ // Nondecreasing indices avoid searching duplicate permutations.
  for(let j=start;j<functions.length;j++){
  const values=functions[j].values;
  for(let i=0;i<6;i++)totals[i]+=values[i];
@@ -231,7 +248,7 @@ function solve(data){
  visit(0,0);
  return best;
 }
-function renderSpread(spread,functions,mode){
+function renderSpread(spread,functions,mode,totalCap,masterworked){
  if(!spread){
  error(mode==="minimum"?
  "No five-piece spread meets these minimums. Lower one or more targets.":
@@ -239,16 +256,27 @@ function renderSpread(spread,functions,mode){
  return;
  }
  const counts=new Map();
- spread.chosen.forEach(i=>counts.set(i,(counts.get(i)||0)+1));
+ const baseTotals=stats.map(()=>0);
+ spread.chosen.forEach(i=>{
+ counts.set(i,(counts.get(i)||0)+1);
+ functions[i].baseValues.forEach((v,j)=>baseTotals[j]+=v);
+ });
  const total=spread.totals.reduce((a,b)=>a+b,0);
- result.innerHTML=`<div class="result-head"><h2>Your stat spread</h2><span class="status">VALID FOR MODEL</span></div>
- <div class="total"><span>Total allocation</span><div><strong>${total}</strong><small> / ${TOTAL_CAP}</small></div></div>
- ${stats.map((s,i)=>`<div class="statline"><div class="stat-top"><span>${names[s]}</span><strong>${spread.totals[i]} <span>/ ${STAT_CAP}</span></strong></div><div class="bar"><div class="fill" style="width:${spread.totals[i]/STAT_CAP*100}%"></div></div></div>`).join("")}
+ result.innerHTML=`<div class="result-head"><h2>Your stat spread</h2><span class="status">${masterworked?"MASTERWORKED":"BASE ARMOR"}</span></div>
+ <div class="total"><span>Total allocation</span><div><strong>${total}</strong><small> / ${totalCap}</small></div></div>
+ ${stats.map((s,i)=>{
+ const bonus=spread.totals[i]-baseTotals[i];
+ return `<div class="statline"><div class="stat-top"><span>${names[s]}</span><strong>${spread.totals[i]} <span>/ ${STAT_CAP}</span></strong></div>
+ <div class="bar"><div class="fill" style="width:${baseTotals[i]/STAT_CAP*100}%"></div><div class="bonus-fill" style="width:${bonus/STAT_CAP*100}%"></div></div>
+ ${masterworked?`<div class="breakdown">${baseTotals[i]} base + ${bonus} masterwork</div>`:""}</div>`;
+ }).join("")}
  <h3>Five armor selections</h3><ul class="selection">${[...counts].map(([i,count])=>{
  const f=functions[i];
- return `<li><div>${f.archetype}<small>${names[f.primary]} ${f.values[stats.indexOf(f.primary)]} · ${names[f.secondary]} ${f.values[stats.indexOf(f.secondary)]} · ${names[f.tertiary]} ${f.values[stats.indexOf(f.tertiary)]}</small></div><b>×${count}</b></li>`;
+ const bonusStats=stats.filter(s=>![f.primary,f.secondary,f.tertiary].includes(s));
+ return `<li><div>${f.archetype}<small>${names[f.primary]} ${f.baseValues[stats.indexOf(f.primary)]} · ${names[f.secondary]} ${f.baseValues[stats.indexOf(f.secondary)]} · ${names[f.tertiary]} ${f.baseValues[stats.indexOf(f.tertiary)]}</small>
+ ${masterworked?`<small>Masterwork: ${bonusStats.map(s=>`${names[s]} +${MASTERWORK_BONUS}`).join(" · ")}</small>`:""}</div><b>×${count}</b></li>`;
  }).join("")}</ul>
- <p class="result-note">Exact ${TOTAL_CAP} total · each stat ≤ ${STAT_CAP}. Masterwork and mods are excluded.</p>`;
+ <p class="result-note">Exact ${totalCap} total · each stat ≤ ${STAT_CAP}.${masterworked?" 375 base + 75 masterwork points.":""} Armor mods and tuning mods are excluded.</p>`;
  result.dataset.solved="true";
 }
 document.getElementById("calculator").addEventListener("submit",event=>{
@@ -258,22 +286,27 @@ document.getElementById("calculator").addEventListener("submit",event=>{
  if(targets.some(v=>!Number.isInteger(v)||v<0||v>STAT_CAP)){
  error(`Every target must be a whole number from 0 to ${STAT_CAP}.`);return;
  }
- if(values.some(v=>!Number.isInteger(v)||v<0||v>30)||values.reduce((a,b)=>a+b,0)!==TOTAL_CAP/PIECES){
- error("Primary + secondary + tertiary must equal 75 per piece, with each value from 0 to 30. Five pieces must total exactly 375.");return;
+ if(values.some(v=>!Number.isInteger(v)||v<0||v>30)||values.reduce((a,b)=>a+b,0)!==BASE_TOTAL/PIECES){
+ error("Primary + secondary + tertiary must equal 75 per piece, with each value from 0 to 30.");return;
  }
  const mode=document.getElementById("mode").value;
+ const masterworked=masterwork.checked;
+ const totalCap=totalFor(masterworked);
  const sum=targets.reduce((a,b)=>a+b,0);
- if((mode==="minimum"&&sum>TOTAL_CAP)||(mode==="maximum"&&sum<TOTAL_CAP)){
- error(mode==="minimum"?"Your minimums total more than 375. Lower your targets.":"Your maximums total less than 375. Increase your limits.");return;
+ if((mode==="minimum"&&sum>totalCap)||(mode==="maximum"&&sum<totalCap)){
+ error(mode==="minimum"?`Your minimums total more than ${totalCap}. Lower your targets.`:`Your maximums total less than ${totalCap}. Increase your limits.`);return;
  }
  const functions=[];
  parents.forEach(([code,archetype,primary,secondary])=>stats.forEach(tertiary=>{
  if(tertiary===primary||tertiary===secondary)return;
- const vector=stats.map(s=>s===primary?values[0]:s===secondary?values[1]:s===tertiary?values[2]:0);
- functions.push({id:code+"_"+tertiary,archetype,primary,secondary,tertiary,values:vector});
+ const assigned=[primary,secondary,tertiary];
+ const baseValues=stats.map(s=>s===primary?values[0]:s===secondary?values[1]:s===tertiary?values[2]:0);
+ // Bonus applies to the three unassigned stats on each individual piece.
+ const finalValues=baseValues.map((v,i)=>v+(masterworked&&!assigned.includes(stats[i])?MASTERWORK_BONUS:0));
+ functions.push({id:code+"_"+tertiary,archetype,primary,secondary,tertiary,baseValues,values:finalValues});
  }));
  button.disabled=true;button.textContent="Searching combinations…";
- result.innerHTML='<div class="result-head"><h2>Calculating your spread</h2><span class="status">SEARCHING</span></div><p>Checking five-piece combinations against your targets and priority order.</p>';
+ result.innerHTML='<div class="result-head"><h2>Calculating your spread</h2><span class="status">SEARCHING</span></div><p>Checking five-piece combinations with your selected masterwork setting, targets, and priorities.</p>';
  const current=revision;
  const blob=new Blob([`const solve=${solve.toString()};onmessage=e=>{try{postMessage({spread:solve(e.data)})}catch(error){postMessage({error:error.message})}}`],{type:"text/javascript"});
  const url=URL.createObjectURL(blob);
@@ -287,14 +320,14 @@ document.getElementById("calculator").addEventListener("submit",event=>{
  if(current!==revision)return;
  worker.terminate();worker=null;resetButton();
  if(e.data.error)error("The calculation failed. Please check the model and try again.");
- else renderSpread(e.data.spread,functions,mode);
+ else renderSpread(e.data.spread,functions,mode,totalCap,masterworked);
  };
  worker.onerror=()=>{
  if(current!==revision)return;
  worker.terminate();worker=null;resetButton();
  error("The background calculation failed. Please try again.");
  };
- worker.postMessage({functions,targets,order:priority.map(s=>stats.indexOf(s)),mode,totalCap:TOTAL_CAP,statCap:STAT_CAP,pieces:PIECES});
+ worker.postMessage({functions,targets,order:priority.map(s=>stats.indexOf(s)),mode,totalCap,statCap:STAT_CAP,pieces:PIECES});
 });
 </script>
 </body>
