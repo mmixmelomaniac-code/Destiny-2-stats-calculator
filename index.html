@@ -3,85 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#121919">
 <title>Destiny 2 · Armor Distribution Calculator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#121919;--surface:#182121;--ink:#eef1e8;--muted:#a6b1aa;--line:#34413c;--accent:#d8ef91;--mono:'IBM Plex Mono',monospace;--display:'Barlow Condensed',sans-serif}
-*{box-sizing:border-box}
-body{margin:0;background:radial-gradient(ellipse at 90% 0%,#29392b55,transparent 50%),var(--bg);color:var(--ink);font:14px 'IBM Plex Sans',sans-serif}
-button,input,select{font:inherit}
-button{cursor:pointer}
-.wrap{max-width:1250px;margin:auto;padding:0 26px}
-header{padding:30px 0 24px;border-bottom:1px solid var(--line);margin-bottom:30px}
-h1{font:500 13px var(--mono);letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin:0}
-.workspace{display:grid;grid-template-columns:1.05fr 1fr;gap:50px;align-items:start}
-.section{padding:0 0 28px}
-.section+.section{border-top:1px solid var(--line);padding-top:22px}
-.heading{display:flex;gap:12px;align-items:center;margin-bottom:10px}
-.number{font:11px var(--mono);color:var(--accent)}
-h2{font:600 27px var(--display);letter-spacing:.4px;margin:0}
-h3{font:600 22px var(--display);margin:24px 0 12px}
-p{color:var(--muted);line-height:1.7;margin:10px 0}
-.small{font-size:12px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:22px 16px;margin-top:22px}
-label{display:block;color:var(--muted);font-size:12px}
-input[type=number],select{width:100%;border:1px solid var(--line);color:var(--ink);background:var(--surface);border-radius:0;padding:12px;margin-top:8px}
-input[type=number]{font:500 23px var(--mono)}
-input:focus,select:focus{border-color:var(--accent)}
-:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
-.mode{display:flex;align-items:center;justify-content:space-between;gap:16px}
-.mode select{width:auto;margin:0;font-size:12px}
-.model{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-details{margin-top:16px}
-summary{color:var(--accent);cursor:pointer;font-size:12px;padding:6px 0}
-.priority-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #34413c88}
-.rank{font:11px var(--mono);color:var(--muted);width:24px}
-.priority-name{flex:1}
-.priority-row button{width:32px;height:30px;border:1px solid var(--line);background:transparent;color:var(--ink);transition:.2s}
-.priority-row button:hover:not(:disabled){background:var(--accent);color:var(--bg)}
-.priority-row button:active:not(:disabled){transform:scale(.92)}
-button:disabled{opacity:.35;cursor:default}
-.masterwork{display:flex;align-items:center;gap:14px;padding:18px 0;cursor:pointer;color:var(--ink);font-size:14px}
-.masterwork input{width:21px;height:21px;margin:0;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
-.masterwork strong{display:block;font-weight:500}
-.masterwork small{display:block;color:var(--muted);line-height:1.6;margin-top:4px}
-.rules-summary{border-left:2px solid var(--accent);padding-left:14px}
-.action{display:flex;align-items:center;justify-content:space-between;width:100%;border:0;background:var(--accent);color:var(--bg);padding:19px 22px;font-weight:600;transition:.2s}
-.action:hover:not(:disabled){background:#e8ffaf;transform:translateY(-2px)}
-.action:active{transform:translateY(1px)}
-.action span{font-size:22px}
-.result{background:linear-gradient(150deg,#213029,var(--surface) 60%);border:1px solid var(--line);padding:28px;position:sticky;top:25px;min-height:400px;animation:reveal .6s .1s both}
-form{animation:reveal .6s both}
-.result-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.status{font:10px var(--mono);color:var(--accent);letter-spacing:1px}
-.empty{padding:40px 0 30px}
-.orb{width:70px;height:70px;border:1px solid var(--line);border-radius:50%;position:relative;margin-bottom:24px}
-.orb:before{content:"";position:absolute;inset:14px;border:1px solid var(--accent);transform:rotate(45deg)}
-.total{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding:24px 0}
-.total strong{font:600 55px var(--display)}
-.total small{color:var(--muted);font:12px var(--mono)}
-.statline{margin:20px 0}
-.stat-top{display:flex;justify-content:space-between;margin-bottom:9px}
-.stat-top strong{font:500 15px var(--mono)}
-.stat-top strong span{color:var(--muted);font-size:10px}
-.breakdown{font:10px var(--mono);color:var(--muted);margin-top:7px}
-.bar{height:5px;background:#35423c;display:flex}
-.fill{height:100%;background:var(--accent)}
-.bonus-fill{height:100%;background:#80bcb0}
-.selection{list-style:none;padding:0;margin:0}
-.selection li{border-top:1px solid var(--line);padding:13px 0;display:flex;justify-content:space-between;gap:12px}
-.selection small{display:block;color:var(--muted);margin-top:4px;line-height:1.6}
-.selection b{font:12px var(--mono);color:var(--accent)}
-.error{color:#ffc1a6}
-.result-note{font-size:11px;border-top:1px solid var(--line);padding-top:16px;margin-top:22px}
-footer{margin-top:40px;padding:24px 0;border-top:1px solid var(--line);color:var(--muted);font:10px var(--mono);letter-spacing:1px}
-@keyframes reveal{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:800px){.workspace{grid-template-columns:1fr;gap:24px}.result{position:static}}
-@media(max-width:500px){.wrap{padding:0 18px}.stats{grid-template-columns:repeat(2,1fr)}.result{padding:20px}.mode{align-items:start;flex-direction:column}h1{font-size:11px;letter-spacing:1.5px}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+:root{--bg:#121919;--surface:#182121;--ink:#eef1e8;--muted:#a6b1aa;--line:#34413c;--accent:#d8ef91;--mw:#80bcb0;--mods:#eac488;--mono:'IBM Plex Mono',monospace}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top right,#29392b55,transparent 55%),var(--bg);color:var(--ink);font:14px 'IBM Plex Sans',sans-serif}button,input,select{font:inherit}button{cursor:pointer}.wrap{max-width:1250px;margin:auto;padding:0 26px}header{padding:30px 0 24px;border-bottom:1px solid var(--line);margin-bottom:30px}h1{font:500 13px var(--mono);letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin:0}.workspace{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}h2,h3{font-family:'Barlow Condensed',sans-serif;font-weight:600}h2{font-size:28px;margin:0}h3{font-size:23px;margin:24px 0 12px}p{color:var(--muted);line-height:1.7}.small{font-size:12px}.section{padding-bottom:28px}.section+.section{border-top:1px solid var(--line);padding-top:22px}.heading{display:flex;align-items:center;gap:12px}.number{font:11px var(--mono);color:var(--accent)}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}label{font-size:12px;color:var(--muted)}input[type=number],select{width:100%;margin-top:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:12px;border-radius:0}input[type=number]{font:500 23px var(--mono)}:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.mode{display:flex;align-items:center;justify-content:space-between;gap:14px}.mode select{width:auto;font-size:12px}.priority-row{display:flex;gap:12px;align-items:center;border-bottom:1px solid var(--line);padding:10px 0}.rank{font:11px var(--mono);color:var(--muted)}.priority-name{flex:1}.priority-row button{background:transparent;color:var(--ink);border:1px solid var(--line);width:34px;height:32px;transition:.2s}.priority-row button:hover:not(:disabled){background:var(--accent);color:var(--bg)}button:disabled{opacity:.35;cursor:default}.toggle{display:flex;align-items:center;gap:13px;color:var(--ink);cursor:pointer;margin-top:20px;font-size:14px}.toggle input{width:21px;height:21px;accent-color:var(--accent);margin:0}.toggle small{display:block;color:var(--muted);line-height:1.6;margin-top:5px}.rules{padding-left:14px;border-left:2px solid var(--accent);font-size:12px}.action{width:100%;display:flex;justify-content:space-between;align-items:center;border:0;padding:19px 22px;background:var(--accent);color:var(--bg);font-weight:600;transition:.2s}.action:hover:not(:disabled){background:#e8ffaf;transform:translateY(-2px)}button:active:not(:disabled){transform:scale(.98)}.result{position:sticky;top:24px;background:linear-gradient(150deg,#213029,var(--surface) 65%);border:1px solid var(--line);padding:28px;min-height:360px}.result-head{display:flex;justify-content:space-between;align-items:center;gap:12px}.status{font:10px var(--mono);color:var(--accent)}.empty{padding:35px 0}.total{display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid var(--line);padding:24px 0}.total strong{font:600 52px 'Barlow Condensed',sans-serif}.total small{color:var(--muted);font:11px var(--mono)}.statline{margin:20px 0}.stat-top{display:flex;justify-content:space-between;margin-bottom:9px}.stat-top strong{font:15px var(--mono)}.bar{display:flex;height:5px;background:#35423c}.base{background:var(--accent)}.mw{background:var(--mw)}.mod{background:var(--mods)}.breakdown{font:10px var(--mono);color:var(--muted);margin-top:7px}.pieces{list-style:none;margin:0;padding:0}.pieces li{border-top:1px solid var(--line);padding:14px 0}.pieces strong{font-weight:500}.pieces small{display:block;color:var(--muted);line-height:1.7;margin-top:4px}.mod-label{color:var(--mods)!important}.mod-summary{border-left:2px solid var(--mods);padding-left:14px;font-size:13px;color:var(--ink)}.error{color:#ffc1a6}.note{border-top:1px solid var(--line);padding-top:16px;font-size:11px}footer{margin-top:40px;border-top:1px solid var(--line);padding:24px 0;color:var(--muted);font:10px var(--mono);letter-spacing:1px}form,.result{animation:reveal .6s both}.result{animation-delay:.12s}@keyframes reveal{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}@media(max-width:800px){.workspace{grid-template-columns:1fr;gap:25px}.result{position:static}}@media(max-width:500px){.wrap{padding:0 18px}.stats{grid-template-columns:repeat(2,1fr)}.mode{align-items:start;flex-direction:column}.result{padding:20px}h1{font-size:11px;letter-spacing:1px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -91,243 +19,189 @@ footer{margin-top:40px;padding:24px 0;border-top:1px solid var(--line);color:var
 <form id="calculator">
 <section class="section">
 <div class="heading"><span class="number">01 /</span><h2>Stat targets</h2></div>
-<div class="mode">
-<p class="small" id="mode-description">Final stats must meet or exceed your minimums.</p>
-<select id="mode" aria-label="Target interpretation">
-<option value="minimum">Minimum targets</option>
-<option value="maximum">Maximum limits</option>
-</select>
-</div>
+<div class="mode"><p class="small" id="description">Final stats must meet or exceed your minimums.</p><select id="mode" aria-label="Target interpretation"><option value="minimum">Minimum targets</option><option value="maximum">Maximum limits</option></select></div>
 <div class="stats" id="inputs"></div>
+<p class="small">Targets include armor, masterwork, and stat mods. Maximum 200 per stat.</p>
 </section>
 <section class="section">
 <div class="heading"><span class="number">02 /</span><h2>Priority order</h2></div>
-<p class="small">Maximize the first stat, then the next. Use the arrows to reorder.</p>
-<div id="priority-list"></div>
+<p class="small">Maximize each stat in order while respecting your targets.</p>
+<div id="priorities"></div>
 </section>
 <section class="section">
-<div class="heading"><span class="number">03 /</span><h2>Distribution rules</h2></div>
-<label class="masterwork">
-<input id="masterwork" type="checkbox" aria-describedby="masterwork-description">
-<span><strong>Use masterworked armor</strong><small id="masterwork-description">All five pieces gain +5 in each stat outside their primary, secondary, and tertiary stats.</small></span>
-</label>
-<p class="small rules-summary" id="rules-summary">Five selections · 375 total points · 150 maximum per stat.<br>Armor mods and tuning mods are excluded.</p>
-<details>
-<summary>Inspect or edit the per-piece model</summary>
-<p class="small">Base values must total 75 per piece. Masterwork adds 15 per piece to the three other stats, giving 90 per piece and 450 overall.</p>
-<div class="model">
-<label>Primary<input id="primary" type="number" min="0" max="30" step="1" value="30" required></label>
-<label>Secondary<input id="secondary" type="number" min="0" max="30" step="1" value="25" required></label>
-<label>Tertiary<input id="tertiary" type="number" min="0" max="30" step="1" value="20" required></label>
-</div>
-</details>
+<div class="heading"><span class="number">03 /</span><h2>Armor &amp; mods</h2></div>
+<label class="toggle"><input type="checkbox" id="masterwork"><span>Use masterworked armor<small>+5 to each of the three unassigned stats on every piece.</small></span></label>
+<p class="rules" id="rules"></p>
+<p class="small">Each piece can equip one +10 or +5 mod in any stat. The calculator chooses mods automatically; +10 is preferred when either size gives the same result.</p>
+<p class="small">For example, 200 Weapons requires 150 Weapons from armor and five +10 Weapons mods.</p>
 </section>
-<button class="action" id="calculate" type="submit">Find best spread <span aria-hidden="true">↗</span></button>
+<button type="submit" class="action" id="calculate">Find best spread <span aria-hidden="true">↗</span></button>
 </form>
 <section class="result" id="result" aria-live="polite" aria-atomic="true">
 <div class="result-head"><h2>Your stat spread</h2><span class="status">AWAITING INPUT</span></div>
-<div class="empty"><div class="orb" aria-hidden="true"></div><h3>Ready to calculate.</h3><p>Choose your targets, priorities, and masterwork setting to find your five armor selections.</p></div>
-<p class="result-note">375 base points, or 450 with all five pieces masterworked. Maximum 150 per stat.</p>
+<div class="empty"><h3>Armor first. Mods included.</h3><p>Set your targets to find five archetype selections and the exact stat mods to equip.</p></div>
+<p class="note">375 base points + up to 50 from mods. Masterworked armor has 450 points + up to 50 from mods.</p>
 </section>
 </main>
 <footer>DESTINY 2 / UNOFFICIAL COMMUNITY TOOL</footer>
 </div>
 <script>
-const BASE_TOTAL=375,STAT_CAP=150,PIECES=5,MASTERWORK_BONUS=5;
 const stats=["W","H","S","C","G","M"];
 const names={W:"Weapons",H:"Health",S:"Super",C:"Class",G:"Grenade",M:"Melee"};
-const parents=[
-["B","Bulwark","H","C"],["O","Siegebreaker","H","G"],
-["I","Powerhouse","W","S"],["E","Gunner","W","G"],
-["P","Colossus","S","H"],["Z","Paragon","S","M"],
-["R","Reaver","C","M"],["J","Specialist","C","W"],
-["D","Demolitionist","G","C"],["K","Grenadier","G","S"],
-["F","Skirmisher","M","W"],["A","Brawler","M","H"]];
+const parents=[["Bulwark","H","C"],["Siegebreaker","H","G"],["Powerhouse","W","S"],["Gunner","W","G"],["Colossus","S","H"],["Paragon","S","M"],["Reaver","C","M"],["Specialist","C","W"],["Demolitionist","G","C"],["Grenadier","G","S"],["Skirmisher","M","W"],["Brawler","M","H"]];
 let priority=[...stats],worker=null,revision=0;
-const result=document.getElementById("result");
-const button=document.getElementById("calculate");
-const masterwork=document.getElementById("masterwork");
-function totalFor(masterworked){return BASE_TOTAL+(masterworked?PIECES*3*MASTERWORK_BONUS:0);}
-stats.forEach(stat=>{
- const label=document.createElement("label");
- label.textContent=names[stat];
+const result=document.getElementById("result"),button=document.getElementById("calculate"),mode=document.getElementById("mode"),masterwork=document.getElementById("masterwork");
+stats.forEach(s=>{
+ const label=document.createElement("label");label.textContent=names[s];
  const input=document.createElement("input");
- Object.assign(input,{type:"number",min:"0",max:String(STAT_CAP),step:"1",value:"0",id:"target-"+stat,required:true});
- label.append(input);
- document.getElementById("inputs").append(label);
+ Object.assign(input,{type:"number",min:"0",max:"200",step:"1",value:"0",required:true,id:"target-"+s});
+ label.append(input);document.getElementById("inputs").append(label);
 });
-function resetButton(){
- button.disabled=false;
- button.innerHTML='Find best spread <span aria-hidden="true">↗</span>';
-}
+function reset(){button.disabled=false;button.innerHTML='Find best spread <span aria-hidden="true">↗</span>';}
 function invalidate(){
- revision++;
- if(worker){worker.terminate();worker=null;resetButton();}
+ revision++;if(worker){worker.terminate();worker=null;reset();}
  const status=result.querySelector(".status");
  if(status&&(result.dataset.solved==="true"||status.textContent==="SEARCHING"))status.textContent="INPUTS CHANGED";
  result.dataset.solved="false";
 }
-function renderPriority(focusStat,direction){
- const list=document.getElementById("priority-list");
- list.replaceChildren();
- priority.forEach((stat,index)=>{
+function rules(){
+ document.getElementById("rules").textContent=masterwork.checked?
+ "Masterworked: 450 armor points + up to 50 mod points = 500 maximum total.":
+ "Not masterworked: 375 armor points + up to 50 mod points = 425 maximum total.";
+}
+rules();
+masterwork.addEventListener("change",rules);
+document.getElementById("calculator").addEventListener("input",invalidate);
+mode.addEventListener("change",()=>{
+ const minimum=mode.value==="minimum";
+ document.getElementById("description").textContent=minimum?"Final stats must meet or exceed your minimums.":"Final stats must not exceed your maximum limits.";
+ stats.forEach(s=>document.getElementById("target-"+s).value=minimum?0:200);invalidate();
+});
+function renderPriority(focusStat,delta){
+ const list=document.getElementById("priorities");list.replaceChildren();
+ priority.forEach((s,i)=>{
  const row=document.createElement("div");row.className="priority-row";
- const rank=document.createElement("span");rank.className="rank";rank.textContent=String(index+1).padStart(2,"0");
- const name=document.createElement("span");name.className="priority-name";name.textContent=names[stat];
- row.append(rank,name);
- [-1,1].forEach(delta=>{
- const b=document.createElement("button");
- b.type="button";b.textContent=delta===-1?"↑":"↓";
- b.disabled=index+delta<0||index+delta>=priority.length;
- b.setAttribute("aria-label",`Move ${names[stat]} ${delta===-1?"up":"down"}`);
- b.dataset.stat=stat;b.dataset.direction=delta;
- b.onclick=()=>{
- [priority[index],priority[index+delta]]=[priority[index+delta],priority[index]];
- invalidate();renderPriority(stat,delta);
- };
- row.append(b);
+ const rank=document.createElement("span");rank.className="rank";rank.textContent=String(i+1).padStart(2,"0");
+ const name=document.createElement("span");name.className="priority-name";name.textContent=names[s];row.append(rank,name);
+ [-1,1].forEach(d=>{
+ const b=document.createElement("button");b.type="button";b.textContent=d<0?"↑":"↓";b.disabled=i+d<0||i+d>=6;b.dataset.stat=s;b.dataset.delta=d;
+ b.setAttribute("aria-label",`Move ${names[s]} ${d<0?"up":"down"}`);
+ b.onclick=()=>{[priority[i],priority[i+d]]=[priority[i+d],priority[i]];invalidate();renderPriority(s,d);};row.append(b);
+ });list.append(row);
  });
- list.append(row);
- });
- if(focusStat){
- const candidate=list.querySelector(`button[data-stat="${focusStat}"][data-direction="${direction}"]`);
- if(!candidate.disabled)candidate.focus();
- else candidate.parentElement.querySelector('button:not(:disabled)').focus();
- }
+ if(focusStat){const b=list.querySelector(`button[data-stat="${focusStat}"][data-delta="${delta}"]`);(b.disabled?b.parentElement.querySelector("button:not(:disabled)"):b).focus();}
 }
 renderPriority();
-document.getElementById("calculator").addEventListener("input",invalidate);
-masterwork.addEventListener("change",()=>{
- document.getElementById("rules-summary").innerHTML=
- `Five selections · ${totalFor(masterwork.checked)} total points · ${STAT_CAP} maximum per stat.<br>${masterwork.checked?"Masterwork included. ":""}Armor mods and tuning mods are excluded.`;
-});
-document.getElementById("mode").addEventListener("change",()=>{
- const minimum=document.getElementById("mode").value==="minimum";
- document.getElementById("mode-description").textContent=minimum?
- "Final stats must meet or exceed your minimums.":"Final stats must not exceed your maximum limits.";
- stats.forEach(s=>document.getElementById("target-"+s).value=minimum?0:STAT_CAP);
- invalidate();
-});
 function error(message){
- result.dataset.solved="false";
- result.innerHTML='<div class="result-head"><h2>Check your constraints</h2><span class="status">NO RESULT</span></div>';
- const p=document.createElement("p");p.className="error";p.textContent=message;
- const note=document.createElement("p");note.className="small";note.textContent="The solver never returns a spread outside the configured rules.";
- result.append(p,note);
+ result.innerHTML='<div class="result-head"><h2>No valid spread</h2><span class="status">CHECK TARGETS</span></div>';
+ const p=document.createElement("p");p.className="error";p.textContent=message;result.append(p);
 }
 function solve(data){
- const {functions,targets,order,mode,totalCap,statCap,pieces}=data;
- const maxContribution=Math.max(...functions.flatMap(f=>f.values));
+ const {functions,targets,order,mode,armorTotal}=data;
  let best=null;
  const totals=[0,0,0,0,0,0],chosen=[];
- function better(a,b){
- if(!b)return true;
- for(const i of order){if(a[i]!==b[i])return a[i]>b[i];}
- return false;
+ const maxPerStat=Array.from({length:6},(_,i)=>Math.max(...functions.map(f=>f.values[i])));
+ function compare(a,b){for(const i of order){if(a[i]!==b[i])return a[i]-b[i];}return 0;}
+ function allocate(){
+ const limits=targets.map(v=>mode==="maximum"?Math.min(200,v):200);
+ const units=totals.map((v,i)=>mode==="minimum"?Math.max(0,Math.ceil((targets[i]-v)/5)):0);
+ const slots=()=>units.reduce((sum,u)=>sum+Math.ceil(u/2),0);
+ if(slots()>5||units.some((u,i)=>totals[i]+u*5>limits[i]))return null;
+ // Reserve mods for all minimums, then spend remaining capacity by priority.
+ for(const i of order){
+ const maxUnits=Math.min(10,Math.floor((limits[i]-totals[i])/5));
+ while(units[i]<maxUnits){
+ units[i]++;
+ if(slots()>5){units[i]--;break;}
+ }
+ }
+ const final=totals.map((v,i)=>v+units[i]*5);
+ return {totals:final,units,chosen:[...chosen]};
  }
  function visit(start,depth){
- const remaining=pieces-depth;
+ const remaining=5-depth;
  for(let i=0;i<6;i++){
- if(totals[i]>statCap||(mode==="maximum"&&totals[i]>targets[i]))return;
- if(mode==="minimum"&&totals[i]+remaining*maxContribution<targets[i])return;
+ if(totals[i]>150||(mode==="maximum"&&totals[i]>targets[i]))return;
+ if(mode==="minimum"&&totals[i]+remaining*maxPerStat[i]+50<targets[i])return;
  }
- if(depth===pieces){
- if(totals.reduce((a,b)=>a+b,0)!==totalCap)return;
- if(mode==="minimum"&&totals.some((v,i)=>v<targets[i]))return;
- if(better(totals,best&&best.totals))best={totals:[...totals],chosen:[...chosen]};
+ if(mode==="minimum"){
+ const required=totals.reduce((sum,v,i)=>sum+Math.ceil(Math.max(0,targets[i]-v-remaining*maxPerStat[i])/10),0);
+ if(required>5)return;
+ }
+ if(depth===5){
+ if(totals.reduce((a,b)=>a+b,0)!==armorTotal)return;
+ const candidate=allocate();if(!candidate)return;
+ const c=best?compare(candidate.totals,best.totals):1;
+ const smallCount=a=>a.units.reduce((n,u)=>n+u%2,0);
+ if(c>0||(c===0&&smallCount(candidate)<smallCount(best)))best=candidate;
  return;
  }
- // Nondecreasing indices avoid searching duplicate permutations.
  for(let j=start;j<functions.length;j++){
- const values=functions[j].values;
- for(let i=0;i<6;i++)totals[i]+=values[i];
+ for(let i=0;i<6;i++)totals[i]+=functions[j].values[i];
  chosen.push(j);visit(j,depth+1);chosen.pop();
- for(let i=0;i<6;i++)totals[i]-=values[i];
+ for(let i=0;i<6;i++)totals[i]-=functions[j].values[i];
  }
  }
- visit(0,0);
- return best;
+ visit(0,0);return best;
 }
-function renderSpread(spread,functions,mode,totalCap,masterworked){
- if(!spread){
- error(mode==="minimum"?
- "No five-piece spread meets these minimums. Lower one or more targets.":
- "No five-piece spread fits these maximums. Increase one or more limits.");
- return;
- }
- const counts=new Map();
- const baseTotals=stats.map(()=>0);
- spread.chosen.forEach(i=>{
- counts.set(i,(counts.get(i)||0)+1);
- functions[i].baseValues.forEach((v,j)=>baseTotals[j]+=v);
+function render(spread,functions,masterworked,targetMode){
+ if(!spread){error(targetMode==="minimum"?"No combination meets every minimum using five armor pieces and at most five mods. Try lowering a target.":"No combination fits every maximum. Try increasing a limit.");return;}
+ const base=Array(6).fill(0),mw=Array(6).fill(0),mods=[];
+ spread.chosen.forEach(index=>functions[index].base.forEach((v,i)=>{base[i]+=v;mw[i]+=functions[index].values[i]-v;}));
+ priority.forEach(s=>{
+ const i=stats.indexOf(s),u=spread.units[i];
+ for(let n=0;n<Math.floor(u/2);n++)mods.push({stat:s,value:10});
+ if(u%2)mods.push({stat:s,value:5});
  });
- const total=spread.totals.reduce((a,b)=>a+b,0);
+ const summary=[];
+ priority.forEach(s=>[10,5].forEach(value=>{
+ const count=mods.filter(m=>m.stat===s&&m.value===value).length;
+ if(count)summary.push(`${count} +${value} ${names[s]} stat mod${count===1?"":"s"}`);
+ }));
+ const total=spread.totals.reduce((a,b)=>a+b,0),maximum=masterworked?500:425;
  result.innerHTML=`<div class="result-head"><h2>Your stat spread</h2><span class="status">${masterworked?"MASTERWORKED":"BASE ARMOR"}</span></div>
- <div class="total"><span>Total allocation</span><div><strong>${total}</strong><small> / ${totalCap}</small></div></div>
- ${stats.map((s,i)=>{
- const bonus=spread.totals[i]-baseTotals[i];
- return `<div class="statline"><div class="stat-top"><span>${names[s]}</span><strong>${spread.totals[i]} <span>/ ${STAT_CAP}</span></strong></div>
- <div class="bar"><div class="fill" style="width:${baseTotals[i]/STAT_CAP*100}%"></div><div class="bonus-fill" style="width:${bonus/STAT_CAP*100}%"></div></div>
- ${masterworked?`<div class="breakdown">${baseTotals[i]} base + ${bonus} masterwork</div>`:""}</div>`;
- }).join("")}
- <h3>Five armor selections</h3><ul class="selection">${[...counts].map(([i,count])=>{
- const f=functions[i];
- const bonusStats=stats.filter(s=>![f.primary,f.secondary,f.tertiary].includes(s));
- return `<li><div>${f.archetype}<small>${names[f.primary]} ${f.baseValues[stats.indexOf(f.primary)]} · ${names[f.secondary]} ${f.baseValues[stats.indexOf(f.secondary)]} · ${names[f.tertiary]} ${f.baseValues[stats.indexOf(f.tertiary)]}</small>
- ${masterworked?`<small>Masterwork: ${bonusStats.map(s=>`${names[s]} +${MASTERWORK_BONUS}`).join(" · ")}</small>`:""}</div><b>×${count}</b></li>`;
- }).join("")}</ul>
- <p class="result-note">Exact ${totalCap} total · each stat ≤ ${STAT_CAP}.${masterworked?" 375 base + 75 masterwork points.":""} Armor mods and tuning mods are excluded.</p>`;
+ <div class="total"><span>Total allocation</span><div><strong>${total}</strong><small> / ${maximum} max</small></div></div>
+ ${stats.map((s,i)=>`<div class="statline"><div class="stat-top"><span>${names[s]}</span><strong>${spread.totals[i]} / 200</strong></div><div class="bar"><div class="base" style="width:${base[i]/2}%"></div><div class="mw" style="width:${mw[i]/2}%"></div><div class="mod" style="width:${spread.units[i]*2.5}%"></div></div><div class="breakdown">${base[i]} base${masterworked?` + ${mw[i]} masterwork`:""} + ${spread.units[i]*5} mods</div></div>`).join("")}
+ <h3>Required stat mods</h3><p class="mod-summary">${summary.length?summary.join("<br>"):"No stat mods required."}</p><p class="small">${mods.length} of 5 mod slots used · +${spread.units.reduce((a,b)=>a+b,0)*5} points</p>
+ <h3>Five armor selections</h3><ol class="pieces">${spread.chosen.map((index,slot)=>{
+ const f=functions[index],assigned=[f.primary,f.secondary,f.tertiary];
+ return `<li><strong>${slot+1}. ${f.archetype}</strong><small>${assigned.map(s=>`${names[s]} ${f.base[stats.indexOf(s)]}`).join(" · ")}</small>${masterworked?`<small>Masterwork: ${stats.filter(s=>!assigned.includes(s)).map(s=>`${names[s]} +5`).join(" · ")}</small>`:""}<small class="mod-label">${mods[slot]?`Equip: +${mods[slot].value} ${names[mods[slot].stat]} stat mod`:"Stat mod slot: unused"}</small></li>`;
+ }).join("")}</ol>
+ <p class="note">One stat mod per piece. Mod placement is interchangeable between these pieces. +5 mods are used when target limits or available slots call for them. Tuning mods and mod energy costs are not modeled.</p>`;
  result.dataset.solved="true";
 }
 document.getElementById("calculator").addEventListener("submit",event=>{
  event.preventDefault();invalidate();
  const targets=stats.map(s=>Number(document.getElementById("target-"+s).value));
- const values=["primary","secondary","tertiary"].map(id=>Number(document.getElementById(id).value));
- if(targets.some(v=>!Number.isInteger(v)||v<0||v>STAT_CAP)){
- error(`Every target must be a whole number from 0 to ${STAT_CAP}.`);return;
- }
- if(values.some(v=>!Number.isInteger(v)||v<0||v>30)||values.reduce((a,b)=>a+b,0)!==BASE_TOTAL/PIECES){
- error("Primary + secondary + tertiary must equal 75 per piece, with each value from 0 to 30.");return;
- }
- const mode=document.getElementById("mode").value;
- const masterworked=masterwork.checked;
- const totalCap=totalFor(masterworked);
+ if(targets.some(v=>!Number.isInteger(v)||v<0||v>200)){error("Every target must be a whole number from 0 to 200.");return;}
+ const masterworked=masterwork.checked,targetMode=mode.value,armorTotal=masterworked?450:375;
  const sum=targets.reduce((a,b)=>a+b,0);
- if((mode==="minimum"&&sum>totalCap)||(mode==="maximum"&&sum<totalCap)){
- error(mode==="minimum"?`Your minimums total more than ${totalCap}. Lower your targets.`:`Your maximums total less than ${totalCap}. Increase your limits.`);return;
- }
+ if(targetMode==="minimum"&&sum>armorTotal+50){error(`Minimums exceed the ${armorTotal+50}-point maximum.`);return;}
+ if(targetMode==="maximum"&&sum<armorTotal){error(`Maximum limits cannot hold the required ${armorTotal} armor points.`);return;}
  const functions=[];
- parents.forEach(([code,archetype,primary,secondary])=>stats.forEach(tertiary=>{
+ parents.forEach(([archetype,primary,secondary])=>stats.forEach(tertiary=>{
  if(tertiary===primary||tertiary===secondary)return;
  const assigned=[primary,secondary,tertiary];
- const baseValues=stats.map(s=>s===primary?values[0]:s===secondary?values[1]:s===tertiary?values[2]:0);
- // Bonus applies to the three unassigned stats on each individual piece.
- const finalValues=baseValues.map((v,i)=>v+(masterworked&&!assigned.includes(stats[i])?MASTERWORK_BONUS:0));
- functions.push({id:code+"_"+tertiary,archetype,primary,secondary,tertiary,baseValues,values:finalValues});
+ const base=stats.map(s=>s===primary?30:s===secondary?25:s===tertiary?20:0);
+ const values=base.map((v,i)=>v+(masterworked&&!assigned.includes(stats[i])?5:0));
+ functions.push({archetype,primary,secondary,tertiary,base,values});
  }));
- button.disabled=true;button.textContent="Searching combinations…";
- result.innerHTML='<div class="result-head"><h2>Calculating your spread</h2><span class="status">SEARCHING</span></div><p>Checking five-piece combinations with your selected masterwork setting, targets, and priorities.</p>';
+ button.disabled=true;button.textContent="Searching armor & mods…";
+ result.innerHTML='<div class="result-head"><h2>Finding your build</h2><span class="status">SEARCHING</span></div><p>Checking armor combinations and allocating up to five +10 or +5 stat mods.</p>';
  const current=revision;
- const blob=new Blob([`const solve=${solve.toString()};onmessage=e=>{try{postMessage({spread:solve(e.data)})}catch(error){postMessage({error:error.message})}}`],{type:"text/javascript"});
- const url=URL.createObjectURL(blob);
- try{worker=new Worker(url);}
- catch(e){
- URL.revokeObjectURL(url);resetButton();
- error("Your browser blocked the background solver. Open this file in a browser that allows Blob web workers.");return;
- }
+ const url=URL.createObjectURL(new Blob([`const solve=${solve.toString()};onmessage=e=>{try{postMessage({spread:solve(e.data)})}catch(e){postMessage({error:true})}}`],{type:"text/javascript"}));
+ try{worker=new Worker(url);}catch(e){URL.revokeObjectURL(url);reset();error("Your browser blocked the background solver. Use a browser that supports Blob web workers.");return;}
  URL.revokeObjectURL(url);
  worker.onmessage=e=>{
  if(current!==revision)return;
- worker.terminate();worker=null;resetButton();
- if(e.data.error)error("The calculation failed. Please check the model and try again.");
- else renderSpread(e.data.spread,functions,mode,totalCap,masterworked);
+ worker.terminate();worker=null;reset();
+ if(e.data.error)error("Calculation failed. Please try again.");else render(e.data.spread,functions,masterworked,targetMode);
  };
  worker.onerror=()=>{
  if(current!==revision)return;
- worker.terminate();worker=null;resetButton();
- error("The background calculation failed. Please try again.");
+ worker.terminate();worker=null;reset();error("The background calculation failed. Please try again.");
  };
- worker.postMessage({functions,targets,order:priority.map(s=>stats.indexOf(s)),mode,totalCap,statCap:STAT_CAP,pieces:PIECES});
+ worker.postMessage({functions,targets,order:priority.map(s=>stats.indexOf(s)),mode:targetMode,armorTotal});
 });
 </script>
 </body>
