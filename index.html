@@ -10,14 +10,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#121919;--surface:#182121;--ink:#eef1e8;--muted:#a6b1aa;--line:#34413c;--accent:#d8ef91;--mono:'IBM Plex Mono',monospace;--display:'Barlow Condensed',sans-serif}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;font-size:14px;background-image:radial-gradient(ellipse at 85% 0%,#29392b66,transparent 50%)}button,input,select{font:inherit}button{cursor:pointer}a{color:inherit}
-.wrap{max-width:1250px;margin:auto;padding:0 26px}header{display:flex;align-items:center;justify-content:space-between;padding:25px 0;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;letter-spacing:2px}.mark{width:27px;height:27px;border:1px solid var(--accent);transform:rotate(45deg);position:relative}.mark:after{content:"";position:absolute;inset:7px;background:var(--accent)}.tag,.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;font-size:14px;background-image:radial-gradient(ellipse at 85% 0%,#29392b66,transparent 50%)}button,input,select{font:inherit}button{cursor:pointer}.wrap{max-width:1250px;margin:auto;padding:0 26px}
+header{display:flex;align-items:center;justify-content:space-between;padding:25px 0;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;letter-spacing:2px}.mark{width:27px;height:27px;border:1px solid var(--accent);transform:rotate(45deg);position:relative}.mark:after{content:"";position:absolute;inset:7px;background:var(--accent)}.tag,.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
 .hero{padding:55px 0 38px;display:flex;align-items:end;justify-content:space-between;gap:25px;animation:reveal .6s both}.eyebrow{color:var(--accent)}h1{font-family:var(--display);font-weight:600;font-size:clamp(55px,8vw,100px);letter-spacing:-1.5px;line-height:.95;margin:16px 0 20px}h1 span{color:var(--accent)}p{color:var(--muted);line-height:1.7;margin:10px 0}.hero p{max-width:520px;font-size:15px}.budget{min-width:190px;border-left:1px solid var(--line);padding-left:25px;margin-bottom:12px}.budget strong{display:block;font:600 64px/1 var(--display)}.budget span{font:11px var(--mono);color:var(--accent)}
-.notice{border-left:2px solid var(--accent);background:#d8ef9108;padding:15px 20px;margin-bottom:32px;color:var(--muted);line-height:1.7}.notice strong{color:var(--ink)}
 .workspace{display:grid;grid-template-columns:1.05fr 1fr;gap:50px;align-items:start}.section{border-top:1px solid var(--line);padding:22px 0 28px}.heading{display:flex;gap:12px;align-items:center;margin-bottom:10px}.number{font:11px var(--mono);color:var(--accent)}h2{font:600 27px var(--display);letter-spacing:.4px;margin:0}h3{font:600 22px var(--display);margin:24px 0 12px}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:22px 16px;margin-top:22px}label{display:block;color:var(--muted);font-size:12px}input,select{width:100%;border:1px solid var(--line);color:var(--ink);background:var(--surface);border-radius:0;padding:12px;outline:none;margin-top:8px}input[type=number]{font:500 23px var(--mono)}input:focus,select:focus{border-color:var(--accent)}:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
-.mode{display:flex;align-items:center;justify-content:space-between;gap:16px}.mode select{width:auto;margin:0;font-size:12px}.small{font-size:12px}.model{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}details{margin-top:16px}summary{color:var(--accent);cursor:pointer;font-size:12px;padding:6px 0}.priority-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #34413c88}.rank{font:11px var(--mono);color:var(--muted);width:24px}.priority-name{flex:1}.priority-row button{width:32px;height:30px;border:1px solid var(--line);background:transparent;color:var(--ink);transition:.2s}.priority-row button:hover:not(:disabled){background:var(--accent);color:var(--bg)}button:disabled{opacity:.3;cursor:default}
-.action{display:flex;align-items:center;justify-content:space-between;width:100%;border:0;background:var(--accent);color:var(--bg);padding:19px 22px;font-weight:600;transition:transform .2s,background .2s}.action:hover:not(:disabled){background:#e8ffaf;transform:translateY(-2px)}.action:active{transform:translateY(1px)}.action span{font-size:22px}.result{background:linear-gradient(150deg,#213029,var(--surface) 60%);border:1px solid var(--line);padding:28px;position:sticky;top:25px;min-height:440px;animation:reveal .7s .15s both}.result-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.status{font:10px var(--mono);color:var(--accent);letter-spacing:1px}.empty{padding:55px 0 30px}.orb{width:90px;height:90px;position:relative;border:1px solid var(--line);border-radius:50%;margin-bottom:25px}.orb:before,.orb:after{content:"";position:absolute;inset:12px;border:1px solid var(--line);transform:rotate(45deg)}.orb:after{inset:32px;background:var(--accent);border:0}.total{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding:24px 0}.total strong{font:600 55px var(--display)}.total small{color:var(--muted);font:12px var(--mono)}.statline{margin:20px 0}.stat-top{display:flex;justify-content:space-between;margin-bottom:9px}.stat-top strong{font:500 15px var(--mono)}.bar{height:5px;background:#35423c}.fill{height:100%;background:var(--accent);transition:width .5s}.selection{list-style:none;padding:0;margin:0}.selection li{border-top:1px solid var(--line);padding:13px 0;display:flex;justify-content:space-between;gap:12px}.selection small{display:block;color:var(--muted);margin-top:4px}.selection b{font:12px var(--mono);color:var(--accent)}.error{color:#ffc1a6}.result-note{font-size:11px;border-top:1px solid var(--line);padding-top:16px;margin-top:22px}footer{margin-top:50px;padding:24px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;color:var(--muted);font:10px var(--mono);letter-spacing:1px}
+.mode{display:flex;align-items:center;justify-content:space-between;gap:16px}.mode select{width:auto;margin:0;font-size:12px}.small{font-size:12px}.model{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}details{margin-top:16px}summary{color:var(--accent);cursor:pointer;font-size:12px;padding:6px 0}.priority-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #34413c88}.rank{font:11px var(--mono);color:var(--muted);width:24px}.priority-name{flex:1}.priority-row button{width:32px;height:30px;border:1px solid var(--line);background:transparent;color:var(--ink);transition:.2s}.priority-row button:hover:not(:disabled){background:var(--accent);color:var(--bg)}.priority-row button:active:not(:disabled){transform:scale(.92)}button:disabled{opacity:.3;cursor:default}
+.action{display:flex;align-items:center;justify-content:space-between;width:100%;border:0;background:var(--accent);color:var(--bg);padding:19px 22px;font-weight:600;transition:transform .2s,background .2s}.action:hover:not(:disabled){background:#e8ffaf;transform:translateY(-2px)}.action:active{transform:translateY(1px)}.action span{font-size:22px}.result{background:linear-gradient(150deg,#213029,var(--surface) 60%);border:1px solid var(--line);padding:28px;position:sticky;top:25px;min-height:440px;animation:reveal .7s .15s both}.result-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.status{font:10px var(--mono);color:var(--accent);letter-spacing:1px}.empty{padding:55px 0 30px}.orb{width:90px;height:90px;position:relative;border:1px solid var(--line);border-radius:50%;margin-bottom:25px}.orb:before,.orb:after{content:"";position:absolute;inset:12px;border:1px solid var(--line);transform:rotate(45deg)}.orb:after{inset:32px;background:var(--accent);border:0}.total{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding:24px 0}.total strong{font:600 55px var(--display)}.total small{color:var(--muted);font:12px var(--mono)}.statline{margin:20px 0}.stat-top{display:flex;justify-content:space-between;margin-bottom:9px}.stat-top strong{font:500 15px var(--mono)}.stat-top strong span{color:var(--muted);font-size:10px}.bar{height:5px;background:#35423c}.fill{height:100%;background:var(--accent)}.selection{list-style:none;padding:0;margin:0}.selection li{border-top:1px solid var(--line);padding:13px 0;display:flex;justify-content:space-between;gap:12px}.selection small{display:block;color:var(--muted);margin-top:4px}.selection b{font:12px var(--mono);color:var(--accent)}.error{color:#ffc1a6}.result-note{font-size:11px;border-top:1px solid var(--line);padding-top:16px;margin-top:22px}footer{margin-top:50px;padding:24px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;color:var(--muted);font:10px var(--mono);letter-spacing:1px}
 @keyframes reveal{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}@media(max-width:800px){.workspace{grid-template-columns:1fr;gap:20px}.result{position:static}.hero{align-items:start}.budget{min-width:110px}.budget strong{font-size:48px}}@media(max-width:500px){.wrap{padding:0 18px}.hero{display:block;padding-top:35px}.budget{border-left:0;padding:0;display:flex;gap:15px;align-items:center;margin-top:20px}.tag{display:none}.stats{grid-template-columns:repeat(2,1fr)}.result{padding:20px}.mode{align-items:start;flex-direction:column}footer{flex-direction:column}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -26,10 +25,9 @@
 <header><div class="brand"><span class="mark" aria-hidden="true"></span>STAT FORGE</div><div class="tag">Destiny 2 / Build planning</div></header>
 <main>
 <section class="hero">
-<div><div class="eyebrow">Armor distribution calculator</div><h1>EVERY POINT.<br><span>WITH PURPOSE.</span></h1><p>Set your stat targets. Rank what matters. Find a five-piece spread with an exact 350-point total.</p></div>
-<div class="budget"><strong>350</strong><span>EXACT BASE TOTAL<br>150 PER-STAT LIMIT</span></div>
+<div><div class="eyebrow">Armor distribution calculator</div><h1>EVERY POINT.<br><span>WITH PURPOSE.</span></h1><p>Set your stat targets. Rank what matters. Find a five-piece spread with an exact 375-point total.</p></div>
+<div class="budget"><strong>375</strong><span>EXACT BASE TOTAL<br>150 PER-STAT LIMIT</span></div>
 </section>
-<div class="notice"><strong>Important correction:</strong> Your original values, 30 + 25 + 20, produce 375 points across five pieces—not 350. This version provisionally uses <strong>30 / 20 / 20</strong> to produce 350. Confirm the secondary and tertiary values before treating results as in-game accurate. You can edit them below.</div>
 <div class="workspace">
 <form id="calculator">
 <section class="section">
@@ -44,12 +42,12 @@
 </section>
 <section class="section">
 <div class="heading"><span class="number">03 /</span><h2>Distribution rules</h2></div>
-<p class="small">Five selections · no masterwork, armor mods, or tuning mods.</p>
+<p class="small">Five selections · 30 primary / 25 secondary / 20 tertiary.<br>No masterwork, armor mods, or tuning mods.</p>
 <details><summary>Inspect or edit the per-piece model</summary>
-<p class="small">Each piece must total 70. Values apply to every archetype. These are model assumptions, not verified game rules.</p>
+<p class="small">Each piece must total 75. Values apply to every archetype; five pieces always total 375.</p>
 <div class="model">
 <label>Primary<input id="primary" type="number" min="0" max="30" step="1" value="30" required></label>
-<label>Secondary<input id="secondary" type="number" min="0" max="30" step="1" value="20" required></label>
+<label>Secondary<input id="secondary" type="number" min="0" max="30" step="1" value="25" required></label>
 <label>Tertiary<input id="tertiary" type="number" min="0" max="30" step="1" value="20" required></label>
 </div>
 </details>
@@ -60,13 +58,14 @@
 <section class="result" id="result" aria-live="polite" aria-atomic="true">
 <div class="result-head"><h2>Your stat spread</h2><span class="status">AWAITING INPUT</span></div>
 <div class="empty"><div class="orb" aria-hidden="true"></div><h3>A build starts here.</h3><p>Choose your targets and calculate to see your stat distribution and five armor selections.</p></div>
-<p class="result-note">Masterwork and mod rules have not been supplied, so their bonuses are intentionally not modeled.</p>
+<p class="result-note">Base stat distribution only. Masterwork and mod bonuses are not modeled.</p>
 </section>
 </div>
 </main>
-<footer><span>STAT FORGE / UNOFFICIAL COMMUNITY TOOL</span><span>BASE MODEL · 5 × 70 = 350</span></footer>
+<footer><span>STAT FORGE / UNOFFICIAL COMMUNITY TOOL</span><span>BASE MODEL · 5 × 75 = 375</span></footer>
 </div>
 <script>
+const TOTAL_CAP=375,STAT_CAP=150,PIECES=5;
 const stats=["W","H","S","C","G","M"];
 const names={W:"Weapons",H:"Health",S:"Super",C:"Class",G:"Grenade",M:"Melee"};
 const parents=[
@@ -78,14 +77,29 @@ const parents=[
 ["F","Skirmisher","M","W"],["A","Brawler","M","H"]];
 let priority=[...stats],worker=null,revision=0;
 const result=document.getElementById("result"),button=document.getElementById("calculate");
+
 stats.forEach(stat=>{
  const label=document.createElement("label");
  label.textContent=names[stat];
  const input=document.createElement("input");
- Object.assign(input,{type:"number",min:"0",max:"150",step:"1",value:"0",id:"target-"+stat,required:true});
+ Object.assign(input,{type:"number",min:"0",max:String(STAT_CAP),step:"1",value:"0",id:"target-"+stat,required:true});
  label.append(input);document.getElementById("inputs").append(label);
 });
-function renderPriority(focusStat, direction){
+
+function resetButton(){
+ button.disabled=false;
+ button.innerHTML='Find best spread <span aria-hidden="true">↗</span>';
+}
+function invalidate(){
+ revision++;
+ if(worker){worker.terminate();worker=null;resetButton();}
+ const status=result.querySelector(".status");
+ if(status&&(result.dataset.solved==="true"||status.textContent==="SEARCHING")){
+ status.textContent="INPUTS CHANGED";
+ }
+ result.dataset.solved="false";
+}
+function renderPriority(focusStat,direction){
  const list=document.getElementById("priority-list");list.replaceChildren();
  priority.forEach((stat,index)=>{
  const row=document.createElement("div");row.className="priority-row";
@@ -96,42 +110,57 @@ function renderPriority(focusStat, direction){
  b.disabled=index+delta<0||index+delta>=priority.length;
  b.setAttribute("aria-label",`Move ${names[stat]} ${delta===-1?"up":"down"}`);
  b.dataset.stat=stat;b.dataset.direction=delta;
- b.onclick=()=>{[priority[index],priority[index+delta]]=[priority[index+delta],priority[index]];invalidate();renderPriority(stat,delta)};
+ b.onclick=()=>{
+ [priority[index],priority[index+delta]]=[priority[index+delta],priority[index]];
+ invalidate();renderPriority(stat,delta);
+ };
  row.append(b);
  });list.append(row);
  });
- if(focusStat){const candidate=list.querySelector(`button[data-stat="${focusStat}"][data-direction="${direction}"]`);if(!candidate.disabled)candidate.focus();else candidate.parentElement.querySelector('button:not(:disabled)').focus();}
+ if(focusStat){
+ const candidate=list.querySelector(`button[data-stat="${focusStat}"][data-direction="${direction}"]`);
+ if(!candidate.disabled)candidate.focus();
+ else candidate.parentElement.querySelector('button:not(:disabled)').focus();
+ }
 }
 renderPriority();
-function invalidate(){
- revision++;
- if(worker){worker.terminate();worker=null;button.disabled=false;button.innerHTML='Find best spread <span aria-hidden="true">↗</span>';}
- if(result.dataset.solved){result.querySelector(".status").textContent="INPUTS CHANGED";result.dataset.solved="";}
-}
 document.getElementById("calculator").addEventListener("input",invalidate);
 document.getElementById("mode").addEventListener("change",()=>{
  const minimum=document.getElementById("mode").value==="minimum";
- document.getElementById("mode-description").textContent=minimum?"Final stats must meet or exceed your minimums.":"Final stats must not exceed your maximum limits.";
- stats.forEach(s=>document.getElementById("target-"+s).value=minimum?0:150);invalidate();
+ document.getElementById("mode-description").textContent=minimum?
+ "Final stats must meet or exceed your minimums.":"Final stats must not exceed your maximum limits.";
+ stats.forEach(s=>document.getElementById("target-"+s).value=minimum?0:STAT_CAP);
+ invalidate();
 });
-function error(message){result.innerHTML=`<div class="result-head"><h2>Check your constraints</h2><span class="status">NO RESULT</span></div><p class="error">${message}</p><p class="small">The solver never returns a spread outside the configured rules.</p>`;}
+function error(message){
+ result.dataset.solved="false";
+ result.innerHTML='<div class="result-head"><h2>Check your constraints</h2><span class="status">NO RESULT</span></div>';
+ const p=document.createElement("p");p.className="error";p.textContent=message;result.append(p);
+ const note=document.createElement("p");note.className="small";note.textContent="The solver never returns a spread outside the configured rules.";result.append(note);
+}
 function solve(data){
- const {functions,targets,order,mode}=data;
- let best=null;const totals=[0,0,0,0,0,0],chosen=[];
- function better(a,b){if(!b)return true;for(const i of order){if(a[i]!==b[i])return a[i]>b[i]}return false;}
- function visit(start,depth){
- const remaining=5-depth;
- for(let i=0;i<6;i++){
- if(totals[i]>150||(mode==="maximum"&&totals[i]>targets[i]))return;
- if(mode==="minimum"&&totals[i]+remaining*30<targets[i])return;
+ const {functions,targets,order,mode,totalCap,statCap,pieces}=data;
+ const maxContribution=Math.max(...functions.flatMap(f=>f.values));
+ let best=null;
+ const totals=[0,0,0,0,0,0],chosen=[];
+ function better(a,b){
+ if(!b)return true;
+ for(const i of order){if(a[i]!==b[i])return a[i]>b[i]}
+ return false;
  }
- if(depth===5){
- if(totals.reduce((a,b)=>a+b,0)!==350)return;
+ function visit(start,depth){
+ const remaining=pieces-depth;
+ for(let i=0;i<6;i++){
+ if(totals[i]>statCap||(mode==="maximum"&&totals[i]>targets[i]))return;
+ if(mode==="minimum"&&totals[i]+remaining*maxContribution<targets[i])return;
+ }
+ if(depth===pieces){
+ if(totals.reduce((a,b)=>a+b,0)!==totalCap)return;
  if(mode==="minimum"&&totals.some((v,i)=>v<targets[i]))return;
  if(better(totals,best&&best.totals))best={totals:[...totals],chosen:[...chosen]};
  return;
  }
- // Nondecreasing indices enumerate combinations, not duplicate permutations.
+ // Enumerate combinations with repetition, avoiding duplicate permutations.
  for(let j=start;j<functions.length;j++){
  const values=functions[j].values;
  for(let i=0;i<6;i++)totals[i]+=values[i];
@@ -139,27 +168,44 @@ function solve(data){
  for(let i=0;i<6;i++)totals[i]-=values[i];
  }
  }
- visit(0,0);return best;
+ visit(0,0);
+ return best;
 }
-function renderSpread(spread,functions){
- if(!spread){error(document.getElementById("mode").value==="minimum"?"No five-piece spread meets these minimums. Lower one or more targets.":"No five-piece spread fits these maximums. Increase one or more limits.");return;}
- const counts=new Map();spread.chosen.forEach(i=>counts.set(i,(counts.get(i)||0)+1));
+function renderSpread(spread,functions,mode){
+ if(!spread){
+ error(mode==="minimum"?
+ "No five-piece spread meets these minimums. Lower one or more targets.":
+ "No five-piece spread fits these maximums. Increase one or more limits.");
+ return;
+ }
+ const counts=new Map();
+ spread.chosen.forEach(i=>counts.set(i,(counts.get(i)||0)+1));
+ const total=spread.totals.reduce((a,b)=>a+b,0);
  result.innerHTML=`<div class="result-head"><h2>Your stat spread</h2><span class="status">VALID FOR MODEL</span></div>
- <div class="total"><span>Total allocation</span><div><strong>350</strong><small> / 350</small></div></div>
- ${stats.map((s,i)=>`<div class="statline"><div class="stat-top"><span>${names[s]}</span><strong>${spread.totals[i]} <span style="color:var(--muted);font-size:10px">/ 150</span></strong></div><div class="bar"><div class="fill" style="width:${spread.totals[i]/150*100}%"></div></div></div>`).join("")}
- <h3>Five armor selections</h3><ul class="selection">${[...counts].map(([i,count])=>{const f=functions[i];return `<li><div>${f.archetype}<small>${names[f.primary]} ${f.values[stats.indexOf(f.primary)]} · ${names[f.secondary]} ${f.values[stats.indexOf(f.secondary)]} · ${names[f.tertiary]} ${f.values[stats.indexOf(f.tertiary)]}</small></div><b>×${count}</b></li>`}).join("")}</ul>
- <p class="result-note">Exact 350 total · each stat ≤ 150. Distribution is based on your configured per-piece values; masterwork and mods are excluded.</p>`;
+ <div class="total"><span>Total allocation</span><div><strong>${total}</strong><small> / ${TOTAL_CAP}</small></div></div>
+ ${stats.map((s,i)=>`<div class="statline"><div class="stat-top"><span>${names[s]}</span><strong>${spread.totals[i]} <span>/ ${STAT_CAP}</span></strong></div><div class="bar"><div class="fill" style="width:${spread.totals[i]/STAT_CAP*100}%"></div></div></div>`).join("")}
+ <h3>Five armor selections</h3><ul class="selection">${[...counts].map(([i,count])=>{
+ const f=functions[i];
+ return `<li><div>${f.archetype}<small>${names[f.primary]} ${f.values[stats.indexOf(f.primary)]} · ${names[f.secondary]} ${f.values[stats.indexOf(f.secondary)]} · ${names[f.tertiary]} ${f.values[stats.indexOf(f.tertiary)]}</small></div><b>×${count}</b></li>`;
+ }).join("")}</ul>
+ <p class="result-note">Exact ${TOTAL_CAP} total · each stat ≤ ${STAT_CAP}. Distribution uses your configured per-piece values; masterwork and mods are excluded.</p>`;
  result.dataset.solved="true";
 }
 document.getElementById("calculator").addEventListener("submit",event=>{
  event.preventDefault();invalidate();
  const targets=stats.map(s=>Number(document.getElementById("target-"+s).value));
  const values=["primary","secondary","tertiary"].map(id=>Number(document.getElementById(id).value));
- if(targets.some(v=>!Number.isInteger(v)||v<0||v>150)){error("Every target must be a whole number from 0 to 150.");return;}
- if(values.some(v=>!Number.isInteger(v)||v<0||v>30)||values.reduce((a,b)=>a+b,0)!==70){error("Primary + secondary + tertiary must equal 70 per piece, with each value from 0 to 30. Five pieces then total exactly 350. The original 30 / 25 / 20 model totals 375 and cannot produce 350.");return;}
+ if(targets.some(v=>!Number.isInteger(v)||v<0||v>STAT_CAP)){
+ error(`Every target must be a whole number from 0 to ${STAT_CAP}.`);return;
+ }
+ if(values.some(v=>!Number.isInteger(v)||v<0||v>30)||values.reduce((a,b)=>a+b,0)!==TOTAL_CAP/PIECES){
+ error("Primary + secondary + tertiary must equal 75 per piece, with each value from 0 to 30. Five pieces must total exactly 375.");return;
+ }
  const mode=document.getElementById("mode").value;
  const sum=targets.reduce((a,b)=>a+b,0);
- if((mode==="minimum"&&sum>350)||(mode==="maximum"&&sum<350)){error(mode==="minimum"?"Your minimums total more than 350. Lower your targets.":"Your maximums total less than 350. Increase your limits.");return;}
+ if((mode==="minimum"&&sum>TOTAL_CAP)||(mode==="maximum"&&sum<TOTAL_CAP)){
+ error(mode==="minimum"?"Your minimums total more than 375. Lower your targets.":"Your maximums total less than 375. Increase your limits.");return;
+ }
  const functions=[];
  parents.forEach(([code,archetype,primary,secondary])=>stats.forEach(tertiary=>{
  if(tertiary===primary||tertiary===secondary)return;
@@ -167,19 +213,27 @@ document.getElementById("calculator").addEventListener("submit",event=>{
  functions.push({id:code+"_"+tertiary,archetype,primary,secondary,tertiary,values:vector});
  }));
  button.disabled=true;button.textContent="Searching combinations…";
- result.innerHTML='<div class="result-head"><h2>Calculating your spread</h2><span class="status">SEARCHING</span></div><p>Checking five-piece combinations against your exact total, targets, and priority order.</p>';
+ result.innerHTML='<div class="result-head"><h2>Calculating your spread</h2><span class="status">SEARCHING</span></div><p>Checking five-piece combinations against your exact 375-point total, targets, and priority order.</p>';
  const current=revision;
  const blob=new Blob([`const solve=${solve.toString()};onmessage=e=>{try{postMessage({spread:solve(e.data)})}catch(error){postMessage({error:error.message})}}`],{type:"text/javascript"});
  const url=URL.createObjectURL(blob);
- try{worker=new Worker(url);}catch(e){URL.revokeObjectURL(url);button.disabled=false;button.textContent="Find best spread";error("Your browser blocked the background solver. Run this file in a browser that allows Blob web workers.");return;}
+ try{worker=new Worker(url);}
+ catch(e){
+ URL.revokeObjectURL(url);resetButton();
+ error("Your browser blocked the background solver. Open this file in a browser that allows Blob web workers.");return;
+ }
  URL.revokeObjectURL(url);
  worker.onmessage=e=>{
  if(current!==revision)return;
- worker.terminate();worker=null;button.disabled=false;button.innerHTML='Find best spread <span aria-hidden="true">↗</span>';
- if(e.data.error)error("The calculation failed. Please check the model and try again.");else renderSpread(e.data.spread,functions);
+ worker.terminate();worker=null;resetButton();
+ if(e.data.error)error("The calculation failed. Please check the model and try again.");
+ else renderSpread(e.data.spread,functions,mode);
  };
- worker.onerror=()=>{worker.terminate();worker=null;button.disabled=false;button.textContent="Find best spread";error("The background calculation failed. Please try again.");};
- worker.postMessage({functions,targets,order:priority.map(s=>stats.indexOf(s)),mode});
+ worker.onerror=()=>{
+ worker.terminate();worker=null;resetButton();
+ error("The background calculation failed. Please try again.");
+ };
+ worker.postMessage({functions,targets,order:priority.map(s=>stats.indexOf(s)),mode,totalCap:TOTAL_CAP,statCap:STAT_CAP,pieces:PIECES});
 });
 </script>
 </body>
